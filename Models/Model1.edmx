@@ -1,0 +1,497 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="KickerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CLIENTS">
+          <Key>
+            <PropertyRef Name="CLI_ID" />
+          </Key>
+          <Property Name="CLI_ID" Type="int" Nullable="false" />
+          <Property Name="CLI_NAME" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="STREET" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="EMAIL" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="CITY" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="ZIP" Type="char" MaxLength="5" />
+        </EntityType>
+        <EntityType Name="DELIVERY_TYPES">
+          <Key>
+            <PropertyRef Name="DEL_ID" />
+          </Key>
+          <Property Name="DEL_ID" Type="int" Nullable="false" />
+          <Property Name="DEL_NAME" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="COST" Type="float" />
+        </EntityType>
+        <EntityType Name="ORDERS">
+          <Key>
+            <PropertyRef Name="ORD_ID" />
+          </Key>
+          <Property Name="ORD_ID" Type="int" Nullable="false" />
+          <Property Name="CLI_ID" Type="int" Nullable="false" />
+          <Property Name="DEL_ID" Type="int" Nullable="false" />
+          <Property Name="PAY_ID" Type="int" Nullable="false" />
+          <Property Name="PRO_ID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PAYMENTS">
+          <Key>
+            <PropertyRef Name="PAY_ID" />
+          </Key>
+          <Property Name="PAY_ID" Type="int" Nullable="false" />
+          <Property Name="PAY_NAME" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="COST" Type="float" />
+        </EntityType>
+        <EntityType Name="PRODUCERS">
+          <Key>
+            <PropertyRef Name="PRO_ID" />
+          </Key>
+          <Property Name="PRO_ID" Type="int" Nullable="false" />
+          <Property Name="PRO_NAME" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="WAR_ID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PRODUCTS">
+          <Key>
+            <PropertyRef Name="PRO_ID" />
+          </Key>
+          <Property Name="PRO_ID" Type="int" Nullable="false" />
+          <Property Name="PRO_NAME" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="UNIT_PRICE" Type="float" Nullable="false" />
+          <Property Name="QUANTITY" Type="int" Nullable="false" />
+          <Property Name="WAR_ID" Type="int" Nullable="false" />
+          <Property Name="PRODUCER_ID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="WAREHOUSES">
+          <Key>
+            <PropertyRef Name="WAR_ID" />
+          </Key>
+          <Property Name="WAR_ID" Type="int" Nullable="false" />
+          <Property Name="WAR_NAME" Type="varchar" MaxLength="40" Nullable="false" />
+          <Property Name="CITY" Type="varchar" MaxLength="40" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__ORDERS__CLI_ID__45F365D3">
+          <End Role="CLIENTS" Type="Self.CLIENTS" Multiplicity="1" />
+          <End Role="ORDERS" Type="Self.ORDERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CLIENTS">
+              <PropertyRef Name="CLI_ID" />
+            </Principal>
+            <Dependent Role="ORDERS">
+              <PropertyRef Name="CLI_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ORDERS__DEL_ID__46E78A0C">
+          <End Role="DELIVERY_TYPES" Type="Self.DELIVERY_TYPES" Multiplicity="1" />
+          <End Role="ORDERS" Type="Self.ORDERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DELIVERY_TYPES">
+              <PropertyRef Name="DEL_ID" />
+            </Principal>
+            <Dependent Role="ORDERS">
+              <PropertyRef Name="DEL_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ORDERS__PAY_ID__47DBAE45">
+          <End Role="PAYMENTS" Type="Self.PAYMENTS" Multiplicity="1" />
+          <End Role="ORDERS" Type="Self.ORDERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PAYMENTS">
+              <PropertyRef Name="PAY_ID" />
+            </Principal>
+            <Dependent Role="ORDERS">
+              <PropertyRef Name="PAY_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ORDERS__PRO_ID__48CFD27E">
+          <End Role="PRODUCTS" Type="Self.PRODUCTS" Multiplicity="1" />
+          <End Role="ORDERS" Type="Self.ORDERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRODUCTS">
+              <PropertyRef Name="PRO_ID" />
+            </Principal>
+            <Dependent Role="ORDERS">
+              <PropertyRef Name="PRO_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PRODUCERS__WAR_I__3F466844">
+          <End Role="WAREHOUSES" Type="Self.WAREHOUSES" Multiplicity="1" />
+          <End Role="PRODUCERS" Type="Self.PRODUCERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WAREHOUSES">
+              <PropertyRef Name="WAR_ID" />
+            </Principal>
+            <Dependent Role="PRODUCERS">
+              <PropertyRef Name="WAR_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PRODUCTS__PRODUC__4316F928">
+          <End Role="PRODUCERS" Type="Self.PRODUCERS" Multiplicity="1" />
+          <End Role="PRODUCTS" Type="Self.PRODUCTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRODUCERS">
+              <PropertyRef Name="PRO_ID" />
+            </Principal>
+            <Dependent Role="PRODUCTS">
+              <PropertyRef Name="PRODUCER_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PRODUCTS__WAR_ID__4222D4EF">
+          <End Role="WAREHOUSES" Type="Self.WAREHOUSES" Multiplicity="1" />
+          <End Role="PRODUCTS" Type="Self.PRODUCTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WAREHOUSES">
+              <PropertyRef Name="WAR_ID" />
+            </Principal>
+            <Dependent Role="PRODUCTS">
+              <PropertyRef Name="WAR_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="KickerModelStoreContainer">
+          <EntitySet Name="CLIENTS" EntityType="Self.CLIENTS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DELIVERY_TYPES" EntityType="Self.DELIVERY_TYPES" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ORDERS" EntityType="Self.ORDERS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PAYMENTS" EntityType="Self.PAYMENTS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PRODUCERS" EntityType="Self.PRODUCERS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PRODUCTS" EntityType="Self.PRODUCTS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WAREHOUSES" EntityType="Self.WAREHOUSES" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__ORDERS__CLI_ID__45F365D3" Association="Self.FK__ORDERS__CLI_ID__45F365D3">
+            <End Role="CLIENTS" EntitySet="CLIENTS" />
+            <End Role="ORDERS" EntitySet="ORDERS" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ORDERS__DEL_ID__46E78A0C" Association="Self.FK__ORDERS__DEL_ID__46E78A0C">
+            <End Role="DELIVERY_TYPES" EntitySet="DELIVERY_TYPES" />
+            <End Role="ORDERS" EntitySet="ORDERS" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ORDERS__PAY_ID__47DBAE45" Association="Self.FK__ORDERS__PAY_ID__47DBAE45">
+            <End Role="PAYMENTS" EntitySet="PAYMENTS" />
+            <End Role="ORDERS" EntitySet="ORDERS" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ORDERS__PRO_ID__48CFD27E" Association="Self.FK__ORDERS__PRO_ID__48CFD27E">
+            <End Role="PRODUCTS" EntitySet="PRODUCTS" />
+            <End Role="ORDERS" EntitySet="ORDERS" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PRODUCERS__WAR_I__3F466844" Association="Self.FK__PRODUCERS__WAR_I__3F466844">
+            <End Role="WAREHOUSES" EntitySet="WAREHOUSES" />
+            <End Role="PRODUCERS" EntitySet="PRODUCERS" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PRODUCTS__PRODUC__4316F928" Association="Self.FK__PRODUCTS__PRODUC__4316F928">
+            <End Role="PRODUCERS" EntitySet="PRODUCERS" />
+            <End Role="PRODUCTS" EntitySet="PRODUCTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PRODUCTS__WAR_ID__4222D4EF" Association="Self.FK__PRODUCTS__WAR_ID__4222D4EF">
+            <End Role="WAREHOUSES" EntitySet="WAREHOUSES" />
+            <End Role="PRODUCTS" EntitySet="PRODUCTS" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="KickerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="CLIENTS">
+          <Key>
+            <PropertyRef Name="CLI_ID" />
+          </Key>
+          <Property Name="CLI_ID" Type="Int32" Nullable="false" />
+          <Property Name="CLI_NAME" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="STREET" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="EMAIL" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CITY" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="ZIP" Type="String" MaxLength="5" FixedLength="true" Unicode="false" />
+          <NavigationProperty Name="ORDERS" Relationship="Self.FK__ORDERS__CLI_ID__45F365D3" FromRole="CLIENTS" ToRole="ORDERS" />
+        </EntityType>
+        <EntityType Name="DELIVERY_TYPES">
+          <Key>
+            <PropertyRef Name="DEL_ID" />
+          </Key>
+          <Property Name="DEL_ID" Type="Int32" Nullable="false" />
+          <Property Name="DEL_NAME" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="COST" Type="Double" />
+          <NavigationProperty Name="ORDERS" Relationship="Self.FK__ORDERS__DEL_ID__46E78A0C" FromRole="DELIVERY_TYPES" ToRole="ORDERS" />
+        </EntityType>
+        <EntityType Name="ORDERS">
+          <Key>
+            <PropertyRef Name="ORD_ID" />
+          </Key>
+          <Property Name="ORD_ID" Type="Int32" Nullable="false" />
+          <Property Name="CLI_ID" Type="Int32" Nullable="false" />
+          <Property Name="DEL_ID" Type="Int32" Nullable="false" />
+          <Property Name="PAY_ID" Type="Int32" Nullable="false" />
+          <Property Name="PRO_ID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CLIENTS" Relationship="Self.FK__ORDERS__CLI_ID__45F365D3" FromRole="ORDERS" ToRole="CLIENTS" />
+          <NavigationProperty Name="DELIVERY_TYPES" Relationship="Self.FK__ORDERS__DEL_ID__46E78A0C" FromRole="ORDERS" ToRole="DELIVERY_TYPES" />
+          <NavigationProperty Name="PAYMENTS" Relationship="Self.FK__ORDERS__PAY_ID__47DBAE45" FromRole="ORDERS" ToRole="PAYMENTS" />
+          <NavigationProperty Name="PRODUCTS" Relationship="Self.FK__ORDERS__PRO_ID__48CFD27E" FromRole="ORDERS" ToRole="PRODUCTS" />
+        </EntityType>
+        <EntityType Name="PAYMENTS">
+          <Key>
+            <PropertyRef Name="PAY_ID" />
+          </Key>
+          <Property Name="PAY_ID" Type="Int32" Nullable="false" />
+          <Property Name="PAY_NAME" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="COST" Type="Double" />
+          <NavigationProperty Name="ORDERS" Relationship="Self.FK__ORDERS__PAY_ID__47DBAE45" FromRole="PAYMENTS" ToRole="ORDERS" />
+        </EntityType>
+        <EntityType Name="PRODUCERS">
+          <Key>
+            <PropertyRef Name="PRO_ID" />
+          </Key>
+          <Property Name="PRO_ID" Type="Int32" Nullable="false" />
+          <Property Name="PRO_NAME" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="WAR_ID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="WAREHOUSES" Relationship="Self.FK__PRODUCERS__WAR_I__3F466844" FromRole="PRODUCERS" ToRole="WAREHOUSES" />
+          <NavigationProperty Name="PRODUCTS" Relationship="Self.FK__PRODUCTS__PRODUC__4316F928" FromRole="PRODUCERS" ToRole="PRODUCTS" />
+        </EntityType>
+        <EntityType Name="PRODUCTS">
+          <Key>
+            <PropertyRef Name="PRO_ID" />
+          </Key>
+          <Property Name="PRO_ID" Type="Int32" Nullable="false" />
+          <Property Name="PRO_NAME" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UNIT_PRICE" Type="Double" Nullable="false" />
+          <Property Name="QUANTITY" Type="Int32" Nullable="false" />
+          <Property Name="WAR_ID" Type="Int32" Nullable="false" />
+          <Property Name="PRODUCER_ID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ORDERS" Relationship="Self.FK__ORDERS__PRO_ID__48CFD27E" FromRole="PRODUCTS" ToRole="ORDERS" />
+          <NavigationProperty Name="PRODUCERS" Relationship="Self.FK__PRODUCTS__PRODUC__4316F928" FromRole="PRODUCTS" ToRole="PRODUCERS" />
+          <NavigationProperty Name="WAREHOUSES" Relationship="Self.FK__PRODUCTS__WAR_ID__4222D4EF" FromRole="PRODUCTS" ToRole="WAREHOUSES" />
+        </EntityType>
+        <EntityType Name="WAREHOUSES">
+          <Key>
+            <PropertyRef Name="WAR_ID" />
+          </Key>
+          <Property Name="WAR_ID" Type="Int32" Nullable="false" />
+          <Property Name="WAR_NAME" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CITY" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="PRODUCERS" Relationship="Self.FK__PRODUCERS__WAR_I__3F466844" FromRole="WAREHOUSES" ToRole="PRODUCERS" />
+          <NavigationProperty Name="PRODUCTS" Relationship="Self.FK__PRODUCTS__WAR_ID__4222D4EF" FromRole="WAREHOUSES" ToRole="PRODUCTS" />
+        </EntityType>
+        <Association Name="FK__ORDERS__CLI_ID__45F365D3">
+          <End Role="CLIENTS" Type="Self.CLIENTS" Multiplicity="1" />
+          <End Role="ORDERS" Type="Self.ORDERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CLIENTS">
+              <PropertyRef Name="CLI_ID" />
+            </Principal>
+            <Dependent Role="ORDERS">
+              <PropertyRef Name="CLI_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ORDERS__DEL_ID__46E78A0C">
+          <End Role="DELIVERY_TYPES" Type="Self.DELIVERY_TYPES" Multiplicity="1" />
+          <End Role="ORDERS" Type="Self.ORDERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DELIVERY_TYPES">
+              <PropertyRef Name="DEL_ID" />
+            </Principal>
+            <Dependent Role="ORDERS">
+              <PropertyRef Name="DEL_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ORDERS__PAY_ID__47DBAE45">
+          <End Role="PAYMENTS" Type="Self.PAYMENTS" Multiplicity="1" />
+          <End Role="ORDERS" Type="Self.ORDERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PAYMENTS">
+              <PropertyRef Name="PAY_ID" />
+            </Principal>
+            <Dependent Role="ORDERS">
+              <PropertyRef Name="PAY_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__ORDERS__PRO_ID__48CFD27E">
+          <End Role="PRODUCTS" Type="Self.PRODUCTS" Multiplicity="1" />
+          <End Role="ORDERS" Type="Self.ORDERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRODUCTS">
+              <PropertyRef Name="PRO_ID" />
+            </Principal>
+            <Dependent Role="ORDERS">
+              <PropertyRef Name="PRO_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PRODUCERS__WAR_I__3F466844">
+          <End Role="WAREHOUSES" Type="Self.WAREHOUSES" Multiplicity="1" />
+          <End Role="PRODUCERS" Type="Self.PRODUCERS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WAREHOUSES">
+              <PropertyRef Name="WAR_ID" />
+            </Principal>
+            <Dependent Role="PRODUCERS">
+              <PropertyRef Name="WAR_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PRODUCTS__PRODUC__4316F928">
+          <End Role="PRODUCERS" Type="Self.PRODUCERS" Multiplicity="1" />
+          <End Role="PRODUCTS" Type="Self.PRODUCTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="PRODUCERS">
+              <PropertyRef Name="PRO_ID" />
+            </Principal>
+            <Dependent Role="PRODUCTS">
+              <PropertyRef Name="PRODUCER_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__PRODUCTS__WAR_ID__4222D4EF">
+          <End Role="WAREHOUSES" Type="Self.WAREHOUSES" Multiplicity="1" />
+          <End Role="PRODUCTS" Type="Self.PRODUCTS" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="WAREHOUSES">
+              <PropertyRef Name="WAR_ID" />
+            </Principal>
+            <Dependent Role="PRODUCTS">
+              <PropertyRef Name="WAR_ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="KickerEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CLIENTS" EntityType="Self.CLIENTS" />
+          <EntitySet Name="DELIVERY_TYPES" EntityType="Self.DELIVERY_TYPES" />
+          <EntitySet Name="ORDERS" EntityType="Self.ORDERS" />
+          <EntitySet Name="PAYMENTS" EntityType="Self.PAYMENTS" />
+          <EntitySet Name="PRODUCERS" EntityType="Self.PRODUCERS" />
+          <EntitySet Name="PRODUCTS" EntityType="Self.PRODUCTS" />
+          <EntitySet Name="WAREHOUSES" EntityType="Self.WAREHOUSES" />
+          <AssociationSet Name="FK__ORDERS__CLI_ID__45F365D3" Association="Self.FK__ORDERS__CLI_ID__45F365D3">
+            <End Role="CLIENTS" EntitySet="CLIENTS" />
+            <End Role="ORDERS" EntitySet="ORDERS" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ORDERS__DEL_ID__46E78A0C" Association="Self.FK__ORDERS__DEL_ID__46E78A0C">
+            <End Role="DELIVERY_TYPES" EntitySet="DELIVERY_TYPES" />
+            <End Role="ORDERS" EntitySet="ORDERS" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ORDERS__PAY_ID__47DBAE45" Association="Self.FK__ORDERS__PAY_ID__47DBAE45">
+            <End Role="PAYMENTS" EntitySet="PAYMENTS" />
+            <End Role="ORDERS" EntitySet="ORDERS" />
+          </AssociationSet>
+          <AssociationSet Name="FK__ORDERS__PRO_ID__48CFD27E" Association="Self.FK__ORDERS__PRO_ID__48CFD27E">
+            <End Role="PRODUCTS" EntitySet="PRODUCTS" />
+            <End Role="ORDERS" EntitySet="ORDERS" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PRODUCERS__WAR_I__3F466844" Association="Self.FK__PRODUCERS__WAR_I__3F466844">
+            <End Role="WAREHOUSES" EntitySet="WAREHOUSES" />
+            <End Role="PRODUCERS" EntitySet="PRODUCERS" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PRODUCTS__PRODUC__4316F928" Association="Self.FK__PRODUCTS__PRODUC__4316F928">
+            <End Role="PRODUCERS" EntitySet="PRODUCERS" />
+            <End Role="PRODUCTS" EntitySet="PRODUCTS" />
+          </AssociationSet>
+          <AssociationSet Name="FK__PRODUCTS__WAR_ID__4222D4EF" Association="Self.FK__PRODUCTS__WAR_ID__4222D4EF">
+            <End Role="WAREHOUSES" EntitySet="WAREHOUSES" />
+            <End Role="PRODUCTS" EntitySet="PRODUCTS" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="KickerModelStoreContainer" CdmEntityContainer="KickerEntities">
+          <EntitySetMapping Name="CLIENTS">
+            <EntityTypeMapping TypeName="KickerModel.CLIENTS">
+              <MappingFragment StoreEntitySet="CLIENTS">
+                <ScalarProperty Name="CLI_ID" ColumnName="CLI_ID" />
+                <ScalarProperty Name="CLI_NAME" ColumnName="CLI_NAME" />
+                <ScalarProperty Name="STREET" ColumnName="STREET" />
+                <ScalarProperty Name="EMAIL" ColumnName="EMAIL" />
+                <ScalarProperty Name="CITY" ColumnName="CITY" />
+                <ScalarProperty Name="ZIP" ColumnName="ZIP" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DELIVERY_TYPES">
+            <EntityTypeMapping TypeName="KickerModel.DELIVERY_TYPES">
+              <MappingFragment StoreEntitySet="DELIVERY_TYPES">
+                <ScalarProperty Name="DEL_ID" ColumnName="DEL_ID" />
+                <ScalarProperty Name="DEL_NAME" ColumnName="DEL_NAME" />
+                <ScalarProperty Name="COST" ColumnName="COST" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ORDERS">
+            <EntityTypeMapping TypeName="KickerModel.ORDERS">
+              <MappingFragment StoreEntitySet="ORDERS">
+                <ScalarProperty Name="ORD_ID" ColumnName="ORD_ID" />
+                <ScalarProperty Name="CLI_ID" ColumnName="CLI_ID" />
+                <ScalarProperty Name="DEL_ID" ColumnName="DEL_ID" />
+                <ScalarProperty Name="PAY_ID" ColumnName="PAY_ID" />
+                <ScalarProperty Name="PRO_ID" ColumnName="PRO_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PAYMENTS">
+            <EntityTypeMapping TypeName="KickerModel.PAYMENTS">
+              <MappingFragment StoreEntitySet="PAYMENTS">
+                <ScalarProperty Name="PAY_ID" ColumnName="PAY_ID" />
+                <ScalarProperty Name="PAY_NAME" ColumnName="PAY_NAME" />
+                <ScalarProperty Name="COST" ColumnName="COST" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PRODUCERS">
+            <EntityTypeMapping TypeName="KickerModel.PRODUCERS">
+              <MappingFragment StoreEntitySet="PRODUCERS">
+                <ScalarProperty Name="PRO_ID" ColumnName="PRO_ID" />
+                <ScalarProperty Name="PRO_NAME" ColumnName="PRO_NAME" />
+                <ScalarProperty Name="WAR_ID" ColumnName="WAR_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PRODUCTS">
+            <EntityTypeMapping TypeName="KickerModel.PRODUCTS">
+              <MappingFragment StoreEntitySet="PRODUCTS">
+                <ScalarProperty Name="PRO_ID" ColumnName="PRO_ID" />
+                <ScalarProperty Name="PRO_NAME" ColumnName="PRO_NAME" />
+                <ScalarProperty Name="UNIT_PRICE" ColumnName="UNIT_PRICE" />
+                <ScalarProperty Name="QUANTITY" ColumnName="QUANTITY" />
+                <ScalarProperty Name="WAR_ID" ColumnName="WAR_ID" />
+                <ScalarProperty Name="PRODUCER_ID" ColumnName="PRODUCER_ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WAREHOUSES">
+            <EntityTypeMapping TypeName="KickerModel.WAREHOUSES">
+              <MappingFragment StoreEntitySet="WAREHOUSES">
+                <ScalarProperty Name="WAR_ID" ColumnName="WAR_ID" />
+                <ScalarProperty Name="WAR_NAME" ColumnName="WAR_NAME" />
+                <ScalarProperty Name="CITY" ColumnName="CITY" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
