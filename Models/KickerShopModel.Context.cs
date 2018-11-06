@@ -13,10 +13,10 @@ namespace KickerShop.Models
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class KickerShopEntities1 : DbContext
+    public partial class KickerShopEntities : DbContext
     {
-        public KickerShopEntities1()
-            : base("name=KickerShopEntities1")
+        public KickerShopEntities()
+            : base("name=KickerShopEntities")
         {
         }
     
@@ -25,12 +25,12 @@ namespace KickerShop.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Client> Client { get; set; }
-        public virtual DbSet<Delivery_type> Delivery_type { get; set; }
-        public virtual DbSet<Order> Order { get; set; }
-        public virtual DbSet<Payment> Payment { get; set; }
-        public virtual DbSet<Producer> Producer { get; set; }
-        public virtual DbSet<Product> Product { get; set; }
-        public virtual DbSet<Warehouse> Warehouse { get; set; }
+        public virtual DbSet<Client> ClientSet { get; set; }
+        public virtual DbSet<Delivery_type> Delivery_typeSet { get; set; }
+        public virtual DbSet<Order> OrderSet { get; set; }
+        public virtual DbSet<Payment> PaymentSet { get; set; }
+        public virtual DbSet<Producer> ProducerSet { get; set; }
+        public virtual DbSet<Product> ProductSet { get; set; }
+        public virtual DbSet<Warehouse> WarehouseSet { get; set; }
     }
 }

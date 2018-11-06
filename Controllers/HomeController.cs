@@ -8,6 +8,7 @@ namespace KickerShop.Controllers
 {
     public class HomeController : Controller
     {
+
         public ActionResult Index()
         {
             return View();
@@ -15,7 +16,7 @@ namespace KickerShop.Controllers
 
         public ActionResult About()
         {
-            ViewBag.Message = "Your application description page.";
+            ViewBag.Message = "In Kicker Shop You can find everything you need to play football.";
 
             return View();
         }
