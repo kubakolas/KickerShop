@@ -155,47 +155,47 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Models\CLIENTS.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Models\DELIVERY_TYPES.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Model1.Context.cs">
+    <Compile Include="Models\Client.cs">
+      <DependentUpon>KickerShopModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Delivery_type.cs">
+      <DependentUpon>KickerShopModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\KickerShopModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Model1.Context.tt</DependentUpon>
+      <DependentUpon>KickerShopModel.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Model1.cs">
+    <Compile Include="Models\KickerShopModel.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Model1.tt</DependentUpon>
+      <DependentUpon>KickerShopModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Model1.Designer.cs">
+    <Compile Include="Models\KickerShopModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Model1.edmx</DependentUpon>
+      <DependentUpon>KickerShopModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\ORDERS.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
+    <Compile Include="Models\Order.cs">
+      <DependentUpon>KickerShopModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\PAYMENTS.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
+    <Compile Include="Models\Payment.cs">
+      <DependentUpon>KickerShopModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\PRODUCERS.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
+    <Compile Include="Models\Producer.cs">
+      <DependentUpon>KickerShopModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\PRODUCTS.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
+    <Compile Include="Models\Product.cs">
+      <DependentUpon>KickerShopModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Warehouse.cs">
+      <DependentUpon>KickerShopModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Models\WAREHOUSES.cs">
-      <DependentUpon>Model1.tt</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
@@ -206,27 +206,27 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Models\Model1.Context.tt">
+    <Content Include="Models\KickerShopModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Model1.Context.cs</LastGenOutput>
-      <DependentUpon>Model1.edmx</DependentUpon>
+      <DependentUpon>KickerShopModel.edmx</DependentUpon>
+      <LastGenOutput>KickerShopModel.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\Model1.tt">
+    <Content Include="Models\KickerShopModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>Model1.edmx</DependentUpon>
-      <LastGenOutput>Model1.cs</LastGenOutput>
+      <DependentUpon>KickerShopModel.edmx</DependentUpon>
+      <LastGenOutput>KickerShopModel.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <EntityDeploy Include="Models\Model1.edmx">
+    <EntityDeploy Include="Models\KickerShopModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Model1.Designer.cs</LastGenOutput>
+      <LastGenOutput>KickerShopModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Models\Model1.edmx.diagram">
-      <DependentUpon>Model1.edmx</DependentUpon>
+    <Content Include="Models\KickerShopModel.edmx.diagram">
+      <DependentUpon>KickerShopModel.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />

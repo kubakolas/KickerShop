@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="3093a54baea844ab936e2433d0c5ca9d" Name="Diagram1">
+        <EntityTypeShape EntityType="KickerShop.Client" Width="1.5" PointX="5.25" PointY="5.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="KickerShop.Delivery_type" Width="1.5" PointX="5.25" PointY="8.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="KickerShop.Order" Width="1.5" PointX="7.5" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="KickerShop.Payment" Width="1.5" PointX="5.25" PointY="11.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="KickerShop.Producer" Width="1.5" PointX="3" PointY="1.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="KickerShop.Product" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="KickerShop.Warehouse" Width="1.5" PointX="0.75" PointY="1.375" IsExpanded="true" />
+        <AssociationConnector Association="KickerShop.FK__ORDERS__CLI_ID__45F365D3" ManuallyRouted="false" />
+        <AssociationConnector Association="KickerShop.FK__ORDERS__DEL_ID__46E78A0C" ManuallyRouted="false" />
+        <AssociationConnector Association="KickerShop.FK__ORDERS__PAY_ID__47DBAE45" ManuallyRouted="false" />
+        <AssociationConnector Association="KickerShop.FK__ORDERS__PRO_ID__48CFD27E" ManuallyRouted="false" />
+        <AssociationConnector Association="KickerShop.FK__PRODUCERS__WAR_I__3F466844" ManuallyRouted="false" />
+        <AssociationConnector Association="KickerShop.FK__PRODUCTS__PRODUC__4316F928" ManuallyRouted="false" />
+        <AssociationConnector Association="KickerShop.FK__PRODUCTS__WAR_ID__4222D4EF" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

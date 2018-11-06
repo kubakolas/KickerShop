@@ -12,17 +12,17 @@ namespace KickerShop.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ORDERS
+    public partial class Order
     {
-        public int ORD_ID { get; set; }
-        public int CLI_ID { get; set; }
-        public int DEL_ID { get; set; }
-        public int PAY_ID { get; set; }
-        public int PRO_ID { get; set; }
+        public int Id { get; set; }
+        public int Cli_id { get; set; }
+        public int Del_id { get; set; }
+        public int Pay_id { get; set; }
+        public int Pro_id { get; set; }
     
-        public virtual CLIENTS CLIENTS { get; set; }
-        public virtual DELIVERY_TYPES DELIVERY_TYPES { get; set; }
-        public virtual PAYMENTS PAYMENTS { get; set; }
-        public virtual PRODUCTS PRODUCTS { get; set; }
+        public virtual Client Client { get; set; }
+        public virtual Delivery_type Delivery_type { get; set; }
+        public virtual Payment Payment { get; set; }
+        public virtual Product Product { get; set; }
     }
 }

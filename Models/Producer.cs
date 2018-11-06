@@ -12,19 +12,20 @@ namespace KickerShop.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PAYMENTS
+    public partial class Producer
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public PAYMENTS()
+        public Producer()
         {
-            this.ORDERS = new HashSet<ORDERS>();
+            this.Product = new HashSet<Product>();
         }
     
-        public int PAY_ID { get; set; }
-        public string PAY_NAME { get; set; }
-        public Nullable<double> COST { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public int War_id { get; set; }
     
+        public virtual Warehouse Warehouse { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ORDERS> ORDERS { get; set; }
+        public virtual ICollection<Product> Product { get; set; }
     }
 }

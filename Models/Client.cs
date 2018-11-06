@@ -12,24 +12,22 @@ namespace KickerShop.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class PRODUCTS
+    public partial class Client
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public PRODUCTS()
+        public Client()
         {
-            this.ORDERS = new HashSet<ORDERS>();
+            this.Order = new HashSet<Order>();
         }
     
-        public int PRO_ID { get; set; }
-        public string PRO_NAME { get; set; }
-        public double UNIT_PRICE { get; set; }
-        public int QUANTITY { get; set; }
-        public int WAR_ID { get; set; }
-        public int PRODUCER_ID { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Street { get; set; }
+        public string Email { get; set; }
+        public string City { get; set; }
+        public string Zip { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ORDERS> ORDERS { get; set; }
-        public virtual PRODUCERS PRODUCERS { get; set; }
-        public virtual WAREHOUSES WAREHOUSES { get; set; }
+        public virtual ICollection<Order> Order { get; set; }
     }
 }
