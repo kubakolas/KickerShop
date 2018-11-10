@@ -4,17 +4,17 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="KickerShop.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="KickerShopModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Client">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="40" Nullable="false" />
           <Property Name="Street" Type="varchar" MaxLength="40" />
           <Property Name="Email" Type="varchar" MaxLength="40" Nullable="false" />
           <Property Name="City" Type="varchar" MaxLength="20" />
-          <Property Name="Zip" Type="char" MaxLength="5" />
+          <Property Name="Zip" Type="varchar" MaxLength="5" />
         </EntityType>
         <EntityType Name="Delivery type">
           <Key>
@@ -28,7 +28,7 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Cli_id" Type="int" Nullable="false" />
           <Property Name="Del_id" Type="int" Nullable="false" />
           <Property Name="Pay_id" Type="int" Nullable="false" />
@@ -69,7 +69,7 @@
           <Property Name="Name" Type="varchar" MaxLength="40" Nullable="false" />
           <Property Name="City" Type="varchar" MaxLength="40" Nullable="false" />
         </EntityType>
-        <Association Name="FK__ORDERS__CLI_ID__45F365D3">
+        <Association Name="FK__Orders__Cli_id__5EBF139D">
           <End Role="Client" Type="Self.Client" Multiplicity="1" />
           <End Role="Order" Type="Self.Order" Multiplicity="*" />
           <ReferentialConstraint>
@@ -81,7 +81,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ORDERS__DEL_ID__46E78A0C">
+        <Association Name="FK__Orders__Del_id__5FB337D6">
           <End Role="Delivery type" Type="Self.Delivery type" Multiplicity="1" />
           <End Role="Order" Type="Self.Order" Multiplicity="*" />
           <ReferentialConstraint>
@@ -93,7 +93,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ORDERS__PAY_ID__47DBAE45">
+        <Association Name="FK__Orders__Pay_id__60A75C0F">
           <End Role="Payment" Type="Self.Payment" Multiplicity="1" />
           <End Role="Order" Type="Self.Order" Multiplicity="*" />
           <ReferentialConstraint>
@@ -105,7 +105,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ORDERS__PRO_ID__48CFD27E">
+        <Association Name="FK__Orders__Pro_id__619B8048">
           <End Role="Product" Type="Self.Product" Multiplicity="1" />
           <End Role="Order" Type="Self.Order" Multiplicity="*" />
           <ReferentialConstraint>
@@ -153,7 +153,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="KickerShopStoreContainer">
+        <EntityContainer Name="KickerShopModelStoreContainer">
           <EntitySet Name="Client" EntityType="Self.Client" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Delivery type" EntityType="Self.Delivery type" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
@@ -161,19 +161,19 @@
           <EntitySet Name="Producer" EntityType="Self.Producer" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Warehouse" EntityType="Self.Warehouse" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__ORDERS__CLI_ID__45F365D3" Association="Self.FK__ORDERS__CLI_ID__45F365D3">
+          <AssociationSet Name="FK__Orders__Cli_id__5EBF139D" Association="Self.FK__Orders__Cli_id__5EBF139D">
             <End Role="Client" EntitySet="Client" />
             <End Role="Order" EntitySet="Order" />
           </AssociationSet>
-          <AssociationSet Name="FK__ORDERS__DEL_ID__46E78A0C" Association="Self.FK__ORDERS__DEL_ID__46E78A0C">
+          <AssociationSet Name="FK__Orders__Del_id__5FB337D6" Association="Self.FK__Orders__Del_id__5FB337D6">
             <End Role="Delivery type" EntitySet="Delivery type" />
             <End Role="Order" EntitySet="Order" />
           </AssociationSet>
-          <AssociationSet Name="FK__ORDERS__PAY_ID__47DBAE45" Association="Self.FK__ORDERS__PAY_ID__47DBAE45">
+          <AssociationSet Name="FK__Orders__Pay_id__60A75C0F" Association="Self.FK__Orders__Pay_id__60A75C0F">
             <End Role="Payment" EntitySet="Payment" />
             <End Role="Order" EntitySet="Order" />
           </AssociationSet>
-          <AssociationSet Name="FK__ORDERS__PRO_ID__48CFD27E" Association="Self.FK__ORDERS__PRO_ID__48CFD27E">
+          <AssociationSet Name="FK__Orders__Pro_id__619B8048" Association="Self.FK__Orders__Pro_id__619B8048">
             <End Role="Product" EntitySet="Product" />
             <End Role="Order" EntitySet="Order" />
           </AssociationSet>
@@ -194,18 +194,18 @@
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="KickerShop" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="KickerShopModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="Client">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Street" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
           <Property Name="Email" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="City" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="Zip" Type="String" MaxLength="5" FixedLength="true" Unicode="false" />
-          <NavigationProperty Name="Order" Relationship="Self.FK__ORDERS__CLI_ID__45F365D3" FromRole="Client" ToRole="Order" />
+          <Property Name="Zip" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Order" Relationship="Self.FK__Orders__Cli_id__5EBF139D" FromRole="Client" ToRole="Order" />
         </EntityType>
         <EntityType Name="Delivery_type">
           <Key>
@@ -214,21 +214,21 @@
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Price" Type="Double" Nullable="false" />
-          <NavigationProperty Name="Order" Relationship="Self.FK__ORDERS__DEL_ID__46E78A0C" FromRole="Delivery_type" ToRole="Order" />
+          <NavigationProperty Name="Order" Relationship="Self.FK__Orders__Del_id__5FB337D6" FromRole="Delivery_type" ToRole="Order" />
         </EntityType>
         <EntityType Name="Order">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Cli_id" Type="Int32" Nullable="false" />
           <Property Name="Del_id" Type="Int32" Nullable="false" />
           <Property Name="Pay_id" Type="Int32" Nullable="false" />
           <Property Name="Pro_id" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Client" Relationship="Self.FK__ORDERS__CLI_ID__45F365D3" FromRole="Order" ToRole="Client" />
-          <NavigationProperty Name="Delivery_type" Relationship="Self.FK__ORDERS__DEL_ID__46E78A0C" FromRole="Order" ToRole="Delivery_type" />
-          <NavigationProperty Name="Payment" Relationship="Self.FK__ORDERS__PAY_ID__47DBAE45" FromRole="Order" ToRole="Payment" />
-          <NavigationProperty Name="Product" Relationship="Self.FK__ORDERS__PRO_ID__48CFD27E" FromRole="Order" ToRole="Product" />
+          <NavigationProperty Name="Client" Relationship="Self.FK__Orders__Cli_id__5EBF139D" FromRole="Order" ToRole="Client" />
+          <NavigationProperty Name="Delivery_type" Relationship="Self.FK__Orders__Del_id__5FB337D6" FromRole="Order" ToRole="Delivery_type" />
+          <NavigationProperty Name="Payment" Relationship="Self.FK__Orders__Pay_id__60A75C0F" FromRole="Order" ToRole="Payment" />
+          <NavigationProperty Name="Product" Relationship="Self.FK__Orders__Pro_id__619B8048" FromRole="Order" ToRole="Product" />
         </EntityType>
         <EntityType Name="Payment">
           <Key>
@@ -237,7 +237,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Price" Type="Double" Nullable="false" />
-          <NavigationProperty Name="Order" Relationship="Self.FK__ORDERS__PAY_ID__47DBAE45" FromRole="Payment" ToRole="Order" />
+          <NavigationProperty Name="Order" Relationship="Self.FK__Orders__Pay_id__60A75C0F" FromRole="Payment" ToRole="Order" />
         </EntityType>
         <EntityType Name="Producer">
           <Key>
@@ -259,7 +259,7 @@
           <Property Name="Quantity" Type="Int32" Nullable="false" />
           <Property Name="War_id" Type="Int32" Nullable="false" />
           <Property Name="Producer_id" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Order" Relationship="Self.FK__ORDERS__PRO_ID__48CFD27E" FromRole="Product" ToRole="Order" />
+          <NavigationProperty Name="Order" Relationship="Self.FK__Orders__Pro_id__619B8048" FromRole="Product" ToRole="Order" />
           <NavigationProperty Name="Producer" Relationship="Self.FK__PRODUCTS__PRODUC__4316F928" FromRole="Product" ToRole="Producer" />
           <NavigationProperty Name="Warehouse" Relationship="Self.FK__PRODUCTS__WAR_ID__4222D4EF" FromRole="Product" ToRole="Warehouse" />
         </EntityType>
@@ -273,7 +273,7 @@
           <NavigationProperty Name="Producer" Relationship="Self.FK__PRODUCERS__WAR_I__3F466844" FromRole="Warehouse" ToRole="Producer" />
           <NavigationProperty Name="Product" Relationship="Self.FK__PRODUCTS__WAR_ID__4222D4EF" FromRole="Warehouse" ToRole="Product" />
         </EntityType>
-        <Association Name="FK__ORDERS__CLI_ID__45F365D3">
+        <Association Name="FK__Orders__Cli_id__5EBF139D">
           <End Role="Client" Type="Self.Client" Multiplicity="1" />
           <End Role="Order" Type="Self.Order" Multiplicity="*" />
           <ReferentialConstraint>
@@ -285,7 +285,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ORDERS__DEL_ID__46E78A0C">
+        <Association Name="FK__Orders__Del_id__5FB337D6">
           <End Role="Delivery_type" Type="Self.Delivery_type" Multiplicity="1" />
           <End Role="Order" Type="Self.Order" Multiplicity="*" />
           <ReferentialConstraint>
@@ -297,7 +297,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ORDERS__PAY_ID__47DBAE45">
+        <Association Name="FK__Orders__Pay_id__60A75C0F">
           <End Role="Payment" Type="Self.Payment" Multiplicity="1" />
           <End Role="Order" Type="Self.Order" Multiplicity="*" />
           <ReferentialConstraint>
@@ -309,7 +309,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__ORDERS__PRO_ID__48CFD27E">
+        <Association Name="FK__Orders__Pro_id__619B8048">
           <End Role="Product" Type="Self.Product" Multiplicity="1" />
           <End Role="Order" Type="Self.Order" Multiplicity="*" />
           <ReferentialConstraint>
@@ -357,7 +357,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="KickerShopEntities1" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="KickerShopEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Client" EntityType="Self.Client" />
           <EntitySet Name="Delivery_type" EntityType="Self.Delivery_type" />
           <EntitySet Name="Order" EntityType="Self.Order" />
@@ -365,19 +365,19 @@
           <EntitySet Name="Producer" EntityType="Self.Producer" />
           <EntitySet Name="Product" EntityType="Self.Product" />
           <EntitySet Name="Warehouse" EntityType="Self.Warehouse" />
-          <AssociationSet Name="FK__ORDERS__CLI_ID__45F365D3" Association="Self.FK__ORDERS__CLI_ID__45F365D3">
+          <AssociationSet Name="FK__Orders__Cli_id__5EBF139D" Association="Self.FK__Orders__Cli_id__5EBF139D">
             <End Role="Client" EntitySet="Client" />
             <End Role="Order" EntitySet="Order" />
           </AssociationSet>
-          <AssociationSet Name="FK__ORDERS__DEL_ID__46E78A0C" Association="Self.FK__ORDERS__DEL_ID__46E78A0C">
+          <AssociationSet Name="FK__Orders__Del_id__5FB337D6" Association="Self.FK__Orders__Del_id__5FB337D6">
             <End Role="Delivery_type" EntitySet="Delivery_type" />
             <End Role="Order" EntitySet="Order" />
           </AssociationSet>
-          <AssociationSet Name="FK__ORDERS__PAY_ID__47DBAE45" Association="Self.FK__ORDERS__PAY_ID__47DBAE45">
+          <AssociationSet Name="FK__Orders__Pay_id__60A75C0F" Association="Self.FK__Orders__Pay_id__60A75C0F">
             <End Role="Payment" EntitySet="Payment" />
             <End Role="Order" EntitySet="Order" />
           </AssociationSet>
-          <AssociationSet Name="FK__ORDERS__PRO_ID__48CFD27E" Association="Self.FK__ORDERS__PRO_ID__48CFD27E">
+          <AssociationSet Name="FK__Orders__Pro_id__619B8048" Association="Self.FK__Orders__Pro_id__619B8048">
             <End Role="Product" EntitySet="Product" />
             <End Role="Order" EntitySet="Order" />
           </AssociationSet>
@@ -399,9 +399,9 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="KickerShopStoreContainer" CdmEntityContainer="KickerShopEntities1">
+        <EntityContainerMapping StorageEntityContainer="KickerShopModelStoreContainer" CdmEntityContainer="KickerShopEntities">
           <EntitySetMapping Name="Client">
-            <EntityTypeMapping TypeName="KickerShop.Client">
+            <EntityTypeMapping TypeName="KickerShopModel.Client">
               <MappingFragment StoreEntitySet="Client">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -413,7 +413,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Delivery_type">
-            <EntityTypeMapping TypeName="KickerShop.Delivery_type">
+            <EntityTypeMapping TypeName="KickerShopModel.Delivery_type">
               <MappingFragment StoreEntitySet="Delivery type">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -422,7 +422,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Order">
-            <EntityTypeMapping TypeName="KickerShop.Order">
+            <EntityTypeMapping TypeName="KickerShopModel.Order">
               <MappingFragment StoreEntitySet="Order">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Cli_id" ColumnName="Cli_id" />
@@ -433,7 +433,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Payment">
-            <EntityTypeMapping TypeName="KickerShop.Payment">
+            <EntityTypeMapping TypeName="KickerShopModel.Payment">
               <MappingFragment StoreEntitySet="Payment">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -442,7 +442,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Producer">
-            <EntityTypeMapping TypeName="KickerShop.Producer">
+            <EntityTypeMapping TypeName="KickerShopModel.Producer">
               <MappingFragment StoreEntitySet="Producer">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -451,7 +451,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Product">
-            <EntityTypeMapping TypeName="KickerShop.Product">
+            <EntityTypeMapping TypeName="KickerShopModel.Product">
               <MappingFragment StoreEntitySet="Product">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
@@ -463,7 +463,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Warehouse">
-            <EntityTypeMapping TypeName="KickerShop.Warehouse">
+            <EntityTypeMapping TypeName="KickerShopModel.Warehouse">
               <MappingFragment StoreEntitySet="Warehouse">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />

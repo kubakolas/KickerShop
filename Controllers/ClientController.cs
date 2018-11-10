@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using KickerShop.Models;
+using System.Data.Entity;
 
 namespace KickerShop.Controllers
 {
@@ -32,7 +33,7 @@ namespace KickerShop.Controllers
 
         // POST: Client/Create
         [HttpPost]
-        public ActionResult Create([Bind(Exclude = "Id")] Client client)
+        public ActionResult Create(Client client)
         {
             ViewBag.Exception = null;
             string msg = null;
@@ -64,29 +65,31 @@ namespace KickerShop.Controllers
             return View(db.ClientSet.Find(id));
         }
 
-
-        // Reszta TO DO
-
         // POST: Client/Edit/5   
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(Client client)
         {
-            try
+            if (ModelState.IsValid)
             {
-                // TODO: Add update logic heres
-
-                return RedirectToAction("Index");
+                try
+                {
+                    db.ClientSet.Attach(client);
+                    db.Entry(client).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch // dorobic obsluge bledow
+                {
+                    return View();
+                }
             }
-            catch
-            {
-                return View();
-            }
+            return View(client);
         }
 
         // GET: Client/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            return View(db.ClientSet.Find(id));
         }
 
         // POST: Client/Delete/5
@@ -95,11 +98,11 @@ namespace KickerShop.Controllers
         {
             try
             {
-                // TODO: Add delete logic here
-
+                View(db.ClientSet.Remove(db.ClientSet.Find(id)));
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            catch
+            catch // dorobic obsluge bledow
             {
                 return View();
             }

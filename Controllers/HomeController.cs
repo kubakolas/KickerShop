@@ -17,14 +17,12 @@ namespace KickerShop.Controllers
         public ActionResult About()
         {
             ViewBag.Message = "In Kicker Shop You can find everything you need to play football.";
-
             return View();
         }
 
         public ActionResult Contact()
         {
             ViewBag.Message = "Your contact page.";
-
             return View();
         }
     }
