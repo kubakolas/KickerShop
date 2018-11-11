@@ -107,5 +107,15 @@ namespace KickerShop.Controllers
                 return View();
             }
         }
+
+        public ActionResult Orders(int id)
+        {
+            var query =
+               (from client in db.ClientSet
+                join order in db.OrderSet on client.Id equals order.Id
+                where client.Id == id
+                select order).ToList();
+            return View(query.ToList());
+        }
     }
 }

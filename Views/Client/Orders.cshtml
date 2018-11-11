@@ -1,0 +1,47 @@
+﻿@model IEnumerable<KickerShop.Models.Order>
+
+@{
+    ViewBag.Title = "Client orders";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Orders</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            Client name
+        </th>
+        <th>
+            Delivery type
+        </th>
+        <th>
+            Payment
+        </th>
+        <th>
+            Product
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Client.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Delivery_type.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Payment.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Product.Name)
+        </td>
+    </tr>
+}
+
+<div>
+        @Html.ActionLink("Back to clients list", "Index")
+</div>
+</table>
