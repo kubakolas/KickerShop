@@ -52,9 +52,22 @@ namespace KickerShop.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.ProducerSet.Add(producer);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.ProducerSet.Add(producer);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception e)
+                {
+                    string msg = null;
+                    if (e.InnerException == null)
+                        msg = "Invalid producer data";
+                    else
+                        msg = e.InnerException.InnerException.Message;
+                    ViewBag.Error = msg;
+                    return View(producer);
+                }
             }
 
             ViewBag.War_id = new SelectList(db.WarehouseSet, "Id", "Name", producer.War_id);

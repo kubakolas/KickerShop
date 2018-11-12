@@ -50,9 +50,22 @@ namespace KickerShop.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.PaymentSet.Add(payment);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.PaymentSet.Add(payment);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception e)
+                {
+                    string msg = null;
+                    if (e.InnerException == null)
+                        msg = "Invalid payment data";
+                    else
+                        msg = e.InnerException.InnerException.Message;
+                    ViewBag.Error = msg;
+                    return View(payment);
+                }
             }
 
             return View(payment);

@@ -53,9 +53,22 @@ namespace KickerShop.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.ProductSet.Add(product);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.ProductSet.Add(product);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception e)
+                {
+                    string msg = null;
+                    if (e.InnerException == null)
+                        msg = "Invalid product data";
+                    else
+                        msg = e.InnerException.InnerException.Message;
+                    ViewBag.Error = msg;
+                    return View(product);
+                }
             }
 
             ViewBag.Producer_id = new SelectList(db.ProducerSet, "Id", "Name", product.Producer_id);

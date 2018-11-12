@@ -50,9 +50,22 @@ namespace KickerShop.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.WarehouseSet.Add(warehouse);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.WarehouseSet.Add(warehouse);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception e)
+                {
+                    string msg = null;
+                    if (e.InnerException == null)
+                        msg = "Invalid warehouse data";
+                    else
+                        msg = e.InnerException.InnerException.Message;
+                    ViewBag.Error = msg;
+                    return View(warehouse);
+                }
             }
 
             return View(warehouse);

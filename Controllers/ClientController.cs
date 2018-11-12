@@ -35,8 +35,6 @@ namespace KickerShop.Controllers
         [HttpPost]
         public ActionResult Create(Client client)
         {
-            ViewBag.Exception = null;
-            string msg = null;
             if (ModelState.IsValid)
             {
                 // LINQ
@@ -47,6 +45,7 @@ namespace KickerShop.Controllers
                 }
                 catch (Exception e)
                 {
+                    string msg = null;
                     if (e.InnerException == null)
                         msg = "Niepoprawne dane klienta";
                     else
