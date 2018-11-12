@@ -1,6 +1,6 @@
 Trigger (posiada fukcje drop):
 
-Stan produktu w magazynie nie może być mniejszy od 0.
+Stan produktu w magazynie nie może być mniejszy od 0. - Aktualizacja, tworzenie Produktu
 
 drop trigger ProductQuantity;
 
@@ -17,7 +17,7 @@ BEGIN
 END
 
 
-Nie można złożyć zamówienia na produkt kiedy jego stan wynosi 0.
+Nie można złożyć zamówienia na produkt kiedy jego stan wynosi 0. - aktualizacja, towrzenie Zamówienia
 
 drop trigger [OrderQuantity];
 
@@ -33,7 +33,7 @@ BEGIN
     RAISERROR ('Brak produktu na magazynie', 11, 1)
 END
 
-Nie można złożyć zamówienia dopóki adres klienta nie zostanie uzupełniony.
+Nie można złożyć zamówienia dopóki adres klienta nie zostanie uzupełniony - tworzenie zamównie przez klienta 
 
 drop trigger OrderAdress;
 
@@ -53,7 +53,7 @@ begin
   end
 end
 
-Po złożeniu zamówienia stan produktu na magazynie zmniejsza się.
+Po złożeniu zamówienia stan produktu na magazynie zmniejsza się. - aktualizacja, tworznei zamowienia
 
 drop trigger [WarehouseQuantity];
 
@@ -77,7 +77,7 @@ END
 
 Jedyny akceptowany kraj przesyłki to Polska. - BRAK KOLUMNY Z NAZWA KRAJU
 
-Darmowa przesyłka powyżej określonej kwoty.
+Darmowa przesyłka powyżej określonej kwoty. - aktualizacja, tworzenie zamówienia
 
 CREATE TRIGGER [dbo].[OrdersFreeShip]
 ON [dbo].[Orders]
@@ -97,7 +97,7 @@ WHERE
   i.Cli_id = o.Cli_id
 END
 
-Sprawdzenie spójnosci produktu - producenta - magazynu
+Sprawdzenie spójnosci produktu - producenta - magazynu - aktualizacja, dodanie produktu
 
 drop trigger [ProductWarehouse];
 
