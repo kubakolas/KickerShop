@@ -167,10 +167,46 @@ Roczny raport inwentaryzacyjny - Nie posadamy kolumny data więc nie wykonywalne
 
 Funkcje: 
 
-Ilość zamówień: OrdersQuantity(CLI_ID)
+Ilość zamówień: OrdersQuantity(CLI_ID) - zmiana nazwy na OrdersCount
 
-Ilość zakupionych towarów: ProducysQuantity(ORD_ID)
+CREATE FUNCTION  [dbo].[OrdersCount](@clientid int)
+RETURNS INT
+as
+BEGIN 
+	declare @count INT
+   SELECT @count = count(*)
+   FROM Orders o
+   where o.Cli_id = @clientid
+   RETURN @count; 
+END
+GO
 
-Wartość zamówienia w okresie czasu: OrdersValue(CLI_ID, DATE)
+Ilość zakupionych towarów: ProducysQuantity(ORD_ID) - brak ponieważ u nas ilość zamówień jest równa ilośći zakupionych towarów
+
+Wartość zamówienia w okresie czasu: OrdersValue(CLI_ID, DATE) - bez DATE bo nie posadamy czasu
+
+CREATE FUNCTION  [dbo].[OrderWorth](@clientid int)
+RETURNS FLOAT
+as
+BEGIN 
+	declare @sum FLOAT
+	select @sum = SUM(p.Unit_price) 
+   from Orders o, Product p
+	where o.Cli_id =@clientid AND p.Id = o.Pro_id
+   RETURN @sum 
+END
+GO
 
 Przychód w okresie czasu: Income()
+
+CREATE FUNCTION  [dbo].[Income]()
+RETURNS FLOAT
+as
+BEGIN 
+	declare @sum FLOAT
+	select @sum = SUM(p.Unit_price) 
+    from Orders o, Product p
+	where  p.Id = o.Pro_id
+   RETURN @sum 
+END
+GO
