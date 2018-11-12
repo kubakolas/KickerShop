@@ -1,0 +1,176 @@
+Trigger (posiada fukcje drop):
+
+Stan produktu w magazynie nie może być mniejszy od 0.
+
+drop trigger ProductQuantity;
+
+CREATE TRIGGER [dbo].[ProductQuantity]
+ON [dbo].[Product]
+FOR  insert, update AS 
+IF EXISTS (
+        SELECT *
+        FROM inserted i
+        WHERE i.Quantity < 0)
+BEGIN
+	ROLLBACK
+    RAISERROR ('Ilosc dodawanego produktu zawsze wieksza od zera', 11, 1)
+END
+
+
+Nie można złożyć zamówienia na produkt kiedy jego stan wynosi 0.
+
+drop trigger [OrderQuantity];
+
+CREATE TRIGGER [dbo].[OrderQuantity]
+ON [dbo].[Orders]
+FOR  insert, update AS 
+IF EXISTS (
+        SELECT *
+        FROM inserted i, Product p
+        WHERE p.Id = i.Pro_id AND p.Quantity = 0)
+BEGIN
+	ROLLBACK
+    RAISERROR ('Brak produktu na magazynie', 11, 1)
+END
+
+Nie można złożyć zamówienia dopóki adres klienta nie zostanie uzupełniony.
+
+drop trigger OrderAdress;
+
+create   trigger [dbo].[OrderAdress]
+on [dbo].[Orders]
+for Insert,Update
+as
+begin
+  declare @street varchar(40), @city varchar(20), @zip varchar(5)
+  SELECT @street = c.Street, @city = c.City , @zip = c.Zip
+     from Client c, inserted i
+	 where c.Id= i.Cli_id
+  if (@street is  null OR @city is null OR @zip is null)
+  begin
+     rollback
+	 raiserror('Klient nie posada uzupełnionego adresu',16,1)
+  end
+end
+
+Po złożeniu zamówienia stan produktu na magazynie zmniejsza się.
+
+drop trigger [WarehouseQuantity];
+
+CREATE TRIGGER [dbo].[WarehouseQuantity]
+ON [dbo].[Orders]
+FOR  insert, update AS 
+IF EXISTS (
+        SELECT *
+        FROM inserted i, Product p
+        WHERE p.Id = i.Pro_id)
+BEGIN
+	UPDATE
+  Product
+SET
+  Quantity = Quantity-1
+FROM
+  Product p ,inserted i 
+WHERE
+   i.Pro_id = p.Id
+END
+
+Jedyny akceptowany kraj przesyłki to Polska. - BRAK KOLUMNY Z NAZWA KRAJU
+
+Darmowa przesyłka powyżej określonej kwoty.
+
+CREATE TRIGGER [dbo].[OrdersFreeShip]
+ON [dbo].[Orders]
+FOR  insert, update AS 
+IF  (
+        SELECT SUM(p.Unit_price) as Price
+        FROM inserted i, Orders o, Product p
+        WHERE i.Cli_id = o.Cli_id AND o.Pro_id = p.Id) > 150.00
+BEGIN
+update 
+Orders
+SET
+  Del_id = 3
+FROM
+   Orders o ,inserted i 
+WHERE
+  i.Cli_id = o.Cli_id
+END
+
+Sprawdzenie spójnosci produktu - producenta - magazynu
+
+drop trigger [ProductWarehouse];
+
+CREATE TRIGGER [dbo].[ProductWarehouse]
+ON [dbo].[Product]
+FOR  insert, update AS 
+IF EXISTS (
+        SELECT *
+        FROM inserted i, Producer p
+        WHERE i.Producer_id = p.Id AND i.War_id != p.War_id)
+BEGIN
+	ROLLBACK
+    RAISERROR ('Niezgodnosc magazynu z magazynem producenta', 11, 1)
+END
+
+WARINGG ! Kazdy triger z osobna działa i spełnia swoją funkcję jednak "OrdersFreeShip" odpierdala mu gdy są załadowane pozostale triggery,
+(bardzo głebokie wywołanie) i dziwny komunikat pojawia sie z kazdym triggerem "The transaction ended in the trigger. The batch has been aborted."
+
+Procedury:
+
+Tworzenie oraz usuwanie klienta - Niepotrzeba ze wzgłegu na saoinkrementujące id oraz warunki spójności c#
+
+Modyfikacja i uzupełnianie danych klienta -Niepotrzeba ze wzgłegu na saoinkrementujące id oraz warunki spójności c#
+
+Dodawanie nowych produktów (id > 1000, proce <0.00)
+
+CREATE   procedure [dbo].[InsertProcuct]
+@id int,
+@name varchar(40),
+@unitprice float,
+@quantity int,
+@warid int,
+@producerid int
+as
+if @unitprice <= 0.00
+begin
+  RAISERROR ('Cena za produkt nie może być mnijsza od zera', 11, 1) 
+  return
+end
+if @id > 1000
+begin
+  RAISERROR ('Numer identyfikacyjny nie może być wiekszy niz 1000', 11, 1) 
+  return
+end
+
+Raport stanu magazynowego towarów
+
+CREATE   procedure [dbo].[WarehouseReport]
+@warehouseid int
+as
+begin
+  Select p.Id, p.Name, p.Quantity from Product p
+  Where p.War_id = @warehouseid
+end
+
+Historia zamówień dla klienta
+
+CREATE   procedure [dbo].[ClientHistory]
+@clientid int
+as
+begin
+  Select o.Cli_id, p.Id, p.Name from Product p, Orders o
+  Where o.Cli_id = @clientid AND o.Pro_id = p.Id
+end
+
+Roczny raport inwentaryzacyjny - Nie posadamy kolumny data więc nie wykonywalne
+
+Funkcje: 
+
+Ilość zamówień: OrdersQuantity(CLI_ID)
+
+Ilość zakupionych towarów: ProducysQuantity(ORD_ID)
+
+Wartość zamówienia w okresie czasu: OrdersValue(CLI_ID, DATE)
+
+Przychód w okresie czasu: Income()
