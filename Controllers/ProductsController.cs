@@ -67,10 +67,11 @@ namespace KickerShop.Controllers
                     else
                         msg = e.InnerException.InnerException.Message;
                     ViewBag.Error = msg;
+                    ViewBag.Producer_id = new SelectList(db.ProducerSet, "Id", "Name", product.Producer_id);
+                    ViewBag.War_id = new SelectList(db.WarehouseSet, "Id", "Name", product.War_id);
                     return View(product);
                 }
             }
-
             ViewBag.Producer_id = new SelectList(db.ProducerSet, "Id", "Name", product.Producer_id);
             ViewBag.War_id = new SelectList(db.WarehouseSet, "Id", "Name", product.War_id);
             return View(product);

@@ -69,6 +69,10 @@ namespace KickerShop.Controllers
                     else
                         msg = e.InnerException.InnerException.Message;
                     ViewBag.Error = msg;
+                    ViewBag.Cli_id = new SelectList(db.ClientSet, "Id", "Name", order.Cli_id);
+                    ViewBag.Del_id = new SelectList(db.Delivery_typeSet, "Id", "Name", order.Del_id);
+                    ViewBag.Pay_id = new SelectList(db.PaymentSet, "Id", "Name", order.Pay_id);
+                    ViewBag.Pro_id = new SelectList(db.ProductSet, "Id", "Name", order.Pro_id);
                     return View(order);
                 }
             }

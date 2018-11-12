@@ -27,12 +27,21 @@ namespace KickerShop.Models
         [MinLength(3, ErrorMessage = "Minimum name length is 3")]
         [MaxLength(40, ErrorMessage = "Maximum name length is 40")]
         public string Name { get; set; }
+
+        [MinLength(3, ErrorMessage = "Minimum street length is 3")]
+        [MaxLength(40, ErrorMessage = "Maximum street length is 40")]
         public string Street { get; set; }
 
         [Required(ErrorMessage = "Email can't be empty")]
         [EmailAddress(ErrorMessage = "Invalid email address")]
         public string Email { get; set; }
+
+        [MinLength(3, ErrorMessage = "Minimum city length is 3")]
+        [MaxLength(20, ErrorMessage = "Maximum city length is 20")]
         public string City { get; set; }
+
+        [RegularExpression(@"[0-9]{2}\-[0-9]{3}",
+        ErrorMessage = "Invalid ZIP code")]
         public string Zip { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
