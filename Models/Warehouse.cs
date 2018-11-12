@@ -11,7 +11,8 @@ namespace KickerShop.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Warehouse
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -20,9 +21,17 @@ namespace KickerShop.Models
             this.Producer = new HashSet<Producer>();
             this.Product = new HashSet<Product>();
         }
-    
+        [Required(ErrorMessage = "Id can't be empty")]
         public int Id { get; set; }
+
+        [Required(ErrorMessage = "Name can't be empty")]
+        [MinLength(3, ErrorMessage = "Minimum name length is 3")]
+        [MaxLength(40, ErrorMessage = "Maximum name length is 40")]
         public string Name { get; set; }
+
+        [Required(ErrorMessage = "City can't be empty")]
+        [MinLength(3, ErrorMessage = "Minimum city length is 3")]
+        [MaxLength(40, ErrorMessage = "Maximum city length is 40")]
         public string City { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

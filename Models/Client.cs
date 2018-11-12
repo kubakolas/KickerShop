@@ -11,7 +11,8 @@ namespace KickerShop.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Client
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -19,10 +20,17 @@ namespace KickerShop.Models
         {
             this.Order = new HashSet<Order>();
         }
-    
+
         public int Id { get; set; }
+
+        [Required(ErrorMessage = "Name can't be empty")]
+        [MinLength(3, ErrorMessage = "Minimum name length is 3")]
+        [MaxLength(40, ErrorMessage = "Maximum name length is 40")]
         public string Name { get; set; }
         public string Street { get; set; }
+
+        [Required(ErrorMessage = "Email can't be empty")]
+        [EmailAddress(ErrorMessage = "Invalid email address")]
         public string Email { get; set; }
         public string City { get; set; }
         public string Zip { get; set; }
