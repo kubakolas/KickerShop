@@ -142,6 +142,8 @@ begin
   RAISERROR ('Numer identyfikacyjny nie może być wiekszy niz 1000', 11, 1) 
   return
 end
+insert into Product(Id, Name, Unit_price, Quantity, War_id, Producer_id)
+values(@id,@name,@unitprice,@quantity,@warid,@producerid)
 
 Raport stanu magazynowego towarów
 
