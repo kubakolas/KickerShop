@@ -169,6 +169,7 @@
     <Compile Include="Models\Client.cs">
       <DependentUpon>KickerShopModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ClientOrdersViewModel.cs" />
     <Compile Include="Models\Delivery_type.cs">
       <DependentUpon>KickerShopModel.tt</DependentUpon>
     </Compile>

@@ -109,12 +109,15 @@ namespace KickerShop.Controllers
 
         public ActionResult Orders(int id)
         {
+            ClientOrdersViewModel model = new ClientOrdersViewModel();
             var query =
                (from client in db.ClientSet
                 join order in db.OrderSet on client.Id equals order.Id
                 where client.Id == id
                 select order).ToList();
-            return View(query.ToList());
+            model.client = db.ClientSet.Find(id);
+            model.orders = query.ToList();
+            return View(model);
         }
     }
 }
