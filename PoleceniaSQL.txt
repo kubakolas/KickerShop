@@ -83,7 +83,7 @@ CREATE TRIGGER [dbo].[OrdersFreeShip]
 ON [dbo].[Orders]
 FOR  insert, update AS 
 IF  (
-        SELECT SUM(p.Unit_price) as Price
+        SELECT SUM(p.Unit_price)
         FROM inserted i, Orders o, Product p
         WHERE i.Cli_id = o.Cli_id AND o.Pro_id = p.Id) > 150.00
 BEGIN
