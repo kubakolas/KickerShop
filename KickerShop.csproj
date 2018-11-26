@@ -166,7 +166,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\ClientOrdersViewModel.cs" />
+    <Compile Include="Models\ClientOrdersViewModel\ClientOrdersViewModel.cs" />
     <Compile Include="Models\Clients.cs">
       <DependentUpon>KickerShopModel.tt</DependentUpon>
     </Compile>
