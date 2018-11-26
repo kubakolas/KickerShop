@@ -4,21 +4,20 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="8809a3e18c184a1c9cb1a88d5ea04300" Name="Diagram1">
-        <EntityTypeShape EntityType="KickerShopModel.Client" Width="1.5" PointX="5.25" PointY="5.5" IsExpanded="true" />
-        <EntityTypeShape EntityType="KickerShopModel.Delivery_type" Width="1.5" PointX="5.25" PointY="8.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="KickerShopModel.Order" Width="1.5" PointX="7.5" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="KickerShopModel.Payment" Width="1.5" PointX="5.25" PointY="11.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="KickerShopModel.Producer" Width="1.5" PointX="3" PointY="1.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="KickerShopModel.Product" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
-        <EntityTypeShape EntityType="KickerShopModel.Warehouse" Width="1.5" PointX="0.75" PointY="1.375" IsExpanded="true" />
-        <AssociationConnector Association="KickerShopModel.FK__Orders__Cli_id__5EBF139D" ManuallyRouted="false" />
-        <AssociationConnector Association="KickerShopModel.FK__Orders__Del_id__5FB337D6" ManuallyRouted="false" />
-        <AssociationConnector Association="KickerShopModel.FK__Orders__Pay_id__60A75C0F" ManuallyRouted="false" />
-        <AssociationConnector Association="KickerShopModel.FK__Orders__Pro_id__619B8048" ManuallyRouted="false" />
-        <AssociationConnector Association="KickerShopModel.FK__PRODUCERS__WAR_I__3F466844" ManuallyRouted="false" />
-        <AssociationConnector Association="KickerShopModel.FK__PRODUCTS__PRODUC__4316F928" ManuallyRouted="false" />
-        <AssociationConnector Association="KickerShopModel.FK__PRODUCTS__WAR_ID__4222D4EF" ManuallyRouted="false" />
+      <Diagram DiagramId="847bbcc71fb541718b597cfea158a7f0" Name="Diagram1">
+        <EntityTypeShape EntityType="KickerShopModel.Clients" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="KickerShopModel.Delivery_types" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="KickerShopModel.OrderDetails" Width="1.5" PointX="5.25" PointY="2.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="KickerShopModel.Orders" Width="1.5" PointX="3" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="KickerShopModel.Payment_types" Width="1.5" PointX="0.75" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="KickerShopModel.Payments" Width="1.5" PointX="5.25" PointY="6.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="KickerShopModel.Products" Width="1.5" PointX="3" PointY="7.875" IsExpanded="true" />
+        <AssociationConnector Association="KickerShopModel.FK__Orders__Client_i__0A9D95DB" ManuallyRouted="false" />
+        <AssociationConnector Association="KickerShopModel.FK__Orders__Delivery__0B91BA14" ManuallyRouted="false" />
+        <AssociationConnector Association="KickerShopModel.FK__OrderDeta__Order__1332DBDC" ManuallyRouted="false" />
+        <AssociationConnector Association="KickerShopModel.FK__OrderDeta__Produ__14270015" ManuallyRouted="false" />
+        <AssociationConnector Association="KickerShopModel.FK__Orders__PayType___0C85DE4D" ManuallyRouted="false" />
+        <AssociationConnector Association="KickerShopModel.FK__Payments__Ord_id__10566F31" ManuallyRouted="false" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

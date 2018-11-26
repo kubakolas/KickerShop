@@ -155,22 +155,22 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\ClientController.cs" />
-    <Compile Include="Controllers\Delivery_typeController.cs" />
+    <Compile Include="Controllers\ClientsController.cs" />
+    <Compile Include="Controllers\DeliveryTypesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\OrderDetailsController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\PaymentsController.cs" />
-    <Compile Include="Controllers\ProducersController.cs" />
+    <Compile Include="Controllers\PaymentTypesController.cs" />
     <Compile Include="Controllers\ProductsController.cs" />
-    <Compile Include="Controllers\WarehousesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Client.cs">
+    <Compile Include="Models\ClientOrdersViewModel.cs" />
+    <Compile Include="Models\Clients.cs">
       <DependentUpon>KickerShopModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ClientOrdersViewModel.cs" />
-    <Compile Include="Models\Delivery_type.cs">
+    <Compile Include="Models\Delivery_types.cs">
       <DependentUpon>KickerShopModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\KickerShopModel.Context.cs">
@@ -188,19 +188,19 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>KickerShopModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\Order.cs">
+    <Compile Include="Models\OrderDetails.cs">
       <DependentUpon>KickerShopModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Payment.cs">
+    <Compile Include="Models\Orders.cs">
       <DependentUpon>KickerShopModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Producer.cs">
+    <Compile Include="Models\Payments.cs">
       <DependentUpon>KickerShopModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Product.cs">
+    <Compile Include="Models\Payment_types.cs">
       <DependentUpon>KickerShopModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Warehouse.cs">
+    <Compile Include="Models\Products.cs">
       <DependentUpon>KickerShopModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -261,42 +261,41 @@
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Client\Index.cshtml" />
-    <Content Include="Views\Client\Details.cshtml" />
-    <Content Include="Views\Client\Edit.cshtml" />
-    <Content Include="Views\Client\Create.cshtml" />
-    <Content Include="Views\Client\Delete.cshtml" />
-    <Content Include="Views\Warehouses\Create.cshtml" />
-    <Content Include="Views\Warehouses\Delete.cshtml" />
-    <Content Include="Views\Warehouses\Details.cshtml" />
-    <Content Include="Views\Warehouses\Edit.cshtml" />
-    <Content Include="Views\Warehouses\Index.cshtml" />
-    <Content Include="Views\Delivery_type\Create.cshtml" />
-    <Content Include="Views\Delivery_type\Delete.cshtml" />
-    <Content Include="Views\Delivery_type\Details.cshtml" />
-    <Content Include="Views\Delivery_type\Edit.cshtml" />
-    <Content Include="Views\Delivery_type\Index.cshtml" />
-    <Content Include="Views\Payments\Create.cshtml" />
-    <Content Include="Views\Payments\Delete.cshtml" />
-    <Content Include="Views\Payments\Details.cshtml" />
-    <Content Include="Views\Payments\Edit.cshtml" />
-    <Content Include="Views\Payments\Index.cshtml" />
-    <Content Include="Views\Producers\Create.cshtml" />
-    <Content Include="Views\Producers\Delete.cshtml" />
-    <Content Include="Views\Producers\Details.cshtml" />
-    <Content Include="Views\Producers\Edit.cshtml" />
-    <Content Include="Views\Producers\Index.cshtml" />
     <Content Include="Views\Products\Create.cshtml" />
     <Content Include="Views\Products\Delete.cshtml" />
     <Content Include="Views\Products\Details.cshtml" />
     <Content Include="Views\Products\Edit.cshtml" />
     <Content Include="Views\Products\Index.cshtml" />
+    <Content Include="Views\OrderDetails\Create.cshtml" />
+    <Content Include="Views\OrderDetails\Delete.cshtml" />
+    <Content Include="Views\OrderDetails\Details.cshtml" />
+    <Content Include="Views\OrderDetails\Edit.cshtml" />
+    <Content Include="Views\OrderDetails\Index.cshtml" />
+    <Content Include="Views\PaymentTypes\Create.cshtml" />
+    <Content Include="Views\PaymentTypes\Delete.cshtml" />
+    <Content Include="Views\PaymentTypes\Details.cshtml" />
+    <Content Include="Views\PaymentTypes\Edit.cshtml" />
+    <Content Include="Views\PaymentTypes\Index.cshtml" />
+    <Content Include="Views\DeliveryTypes\Create.cshtml" />
+    <Content Include="Views\DeliveryTypes\Delete.cshtml" />
+    <Content Include="Views\DeliveryTypes\Details.cshtml" />
+    <Content Include="Views\DeliveryTypes\Edit.cshtml" />
+    <Content Include="Views\DeliveryTypes\Index.cshtml" />
+    <Content Include="Views\Clients\Create.cshtml" />
+    <Content Include="Views\Clients\Delete.cshtml" />
+    <Content Include="Views\Clients\Details.cshtml" />
+    <Content Include="Views\Clients\Edit.cshtml" />
+    <Content Include="Views\Clients\Index.cshtml" />
+    <Content Include="Views\Payments\Create.cshtml" />
+    <Content Include="Views\Payments\Delete.cshtml" />
+    <Content Include="Views\Payments\Details.cshtml" />
+    <Content Include="Views\Payments\Edit.cshtml" />
+    <Content Include="Views\Payments\Index.cshtml" />
     <Content Include="Views\Orders\Create.cshtml" />
     <Content Include="Views\Orders\Delete.cshtml" />
     <Content Include="Views\Orders\Details.cshtml" />
     <Content Include="Views\Orders\Edit.cshtml" />
     <Content Include="Views\Orders\Index.cshtml" />
-    <Content Include="Views\Client\Orders.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

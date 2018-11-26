@@ -10,107 +10,107 @@ using KickerShop.Models;
 
 namespace KickerShop.Controllers
 {
-    public class ProductsController : Controller
+    public class ClientsController : Controller
     {
         private KickerShopEntities db = new KickerShopEntities();
 
-        // GET: Products
+        // GET: Clients
         public ActionResult Index()
         {
-            return View(db.ProductSet.ToList());
+            return View(db.ClientSet.ToList());
         }
 
-        // GET: Products/Details/5
+        // GET: Clients/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Products products = db.ProductSet.Find(id);
-            if (products == null)
+            Clients clients = db.ClientSet.Find(id);
+            if (clients == null)
             {
                 return HttpNotFound();
             }
-            return View(products);
+            return View(clients);
         }
 
-        // GET: Products/Create
+        // GET: Clients/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Products/Create
+        // POST: Clients/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Unit_price,Quantity")] Products products)
+        public ActionResult Create([Bind(Include = "Id,Name,Street,Email,City,Zip")] Clients clients)
         {
             if (ModelState.IsValid)
             {
-                db.ProductSet.Add(products);
+                db.ClientSet.Add(clients);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(products);
+            return View(clients);
         }
 
-        // GET: Products/Edit/5
+        // GET: Clients/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Products products = db.ProductSet.Find(id);
-            if (products == null)
+            Clients clients = db.ClientSet.Find(id);
+            if (clients == null)
             {
                 return HttpNotFound();
             }
-            return View(products);
+            return View(clients);
         }
 
-        // POST: Products/Edit/5
+        // POST: Clients/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Unit_price,Quantity")] Products products)
+        public ActionResult Edit([Bind(Include = "Id,Name,Street,Email,City,Zip")] Clients clients)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(products).State = EntityState.Modified;
+                db.Entry(clients).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(products);
+            return View(clients);
         }
 
-        // GET: Products/Delete/5
+        // GET: Clients/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Products products = db.ProductSet.Find(id);
-            if (products == null)
+            Clients clients = db.ClientSet.Find(id);
+            if (clients == null)
             {
                 return HttpNotFound();
             }
-            return View(products);
+            return View(clients);
         }
 
-        // POST: Products/Delete/5
+        // POST: Clients/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Products products = db.ProductSet.Find(id);
-            db.ProductSet.Remove(products);
+            Clients clients = db.ClientSet.Find(id);
+            db.ClientSet.Remove(clients);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

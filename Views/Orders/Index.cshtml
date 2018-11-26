@@ -1,11 +1,11 @@
-﻿@model IEnumerable<KickerShop.Models.Order>
+﻿@model IEnumerable<KickerShop.Models.Orders>
 
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Orders</h2>
+<h2>Index</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -13,16 +13,16 @@
 <table class="table">
     <tr>
         <th>
-            Client
+            @Html.DisplayNameFor(model => model.OrderDate)
         </th>
         <th>
-            Delivery type
+            @Html.DisplayNameFor(model => model.Clients.Name)
         </th>
         <th>
-            Payment
+            @Html.DisplayNameFor(model => model.Delivery_types.Name)
         </th>
         <th>
-            Product
+            @Html.DisplayNameFor(model => model.Payment_types.Name)
         </th>
         <th></th>
     </tr>
@@ -30,16 +30,16 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Client.Name)
+            @Html.DisplayFor(modelItem => item.OrderDate)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Delivery_type.Name)
+            @Html.DisplayFor(modelItem => item.Clients.Name)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Payment.Name)
+            @Html.DisplayFor(modelItem => item.Delivery_types.Name)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Product.Name)
+            @Html.DisplayFor(modelItem => item.Payment_types.Name)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |

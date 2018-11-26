@@ -25,12 +25,12 @@ namespace KickerShop.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<Client> ClientSet { get; set; }
-        public virtual DbSet<Delivery_type> Delivery_typeSet { get; set; }
-        public virtual DbSet<Order> OrderSet { get; set; }
-        public virtual DbSet<Payment> PaymentSet { get; set; }
-        public virtual DbSet<Producer> ProducerSet { get; set; }
-        public virtual DbSet<Product> ProductSet { get; set; }
-        public virtual DbSet<Warehouse> WarehouseSet { get; set; }
+        public virtual DbSet<Clients> ClientSet { get; set; }
+        public virtual DbSet<Delivery_types> Delivery_typeSet { get; set; }
+        public virtual DbSet<OrderDetails> OrderDetailSet { get; set; }
+        public virtual DbSet<Orders> OrderSet { get; set; }
+        public virtual DbSet<Payment_types> Payment_typeSet { get; set; }
+        public virtual DbSet<Payments> PaymentSet { get; set; }
+        public virtual DbSet<Products> ProductSet { get; set; }
     }
 }

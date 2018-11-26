@@ -5,7 +5,7 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
       <Schema Namespace="KickerShopModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-        <EntityType Name="Client">
+        <EntityType Name="Clients">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -16,41 +16,53 @@
           <Property Name="City" Type="varchar" MaxLength="20" />
           <Property Name="Zip" Type="varchar" MaxLength="5" />
         </EntityType>
-        <EntityType Name="Delivery type">
+        <EntityType Name="Delivery types">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="40" Nullable="false" />
-          <Property Name="Price" Type="float" Nullable="false" />
+          <Property Name="Unit_price" Type="float" Nullable="false" />
         </EntityType>
-        <EntityType Name="Order">
+        <EntityType Name="OrderDetails">
+          <Key>
+            <PropertyRef Name="OrderDetail_id" />
+          </Key>
+          <Property Name="OrderDetail_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Order_id" Type="int" />
+          <Property Name="Product_id" Type="int" />
+          <Property Name="Quantity" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Orders">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Cli_id" Type="int" Nullable="false" />
-          <Property Name="Del_id" Type="int" Nullable="false" />
-          <Property Name="Pay_id" Type="int" Nullable="false" />
-          <Property Name="Pro_id" Type="int" Nullable="false" />
+          <Property Name="OrderDate" Type="date" Nullable="false" />
+          <Property Name="Client_id" Type="int" Nullable="false" />
+          <Property Name="DeliveryType_id" Type="int" Nullable="false" />
+          <Property Name="PayType_id" Type="int" Nullable="false" />
         </EntityType>
-        <EntityType Name="Payment">
+        <EntityType Name="Payment types">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="40" Nullable="false" />
-          <Property Name="Price" Type="float" Nullable="false" />
+          <Property Name="Unit_price" Type="float" Nullable="false" />
         </EntityType>
-        <EntityType Name="Producer">
+        <EntityType Name="Payments">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="Payment_id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="40" Nullable="false" />
-          <Property Name="War_id" Type="int" Nullable="false" />
+          <Property Name="Payment_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Ord_id" Type="int" Nullable="false" />
+          <Property Name="Total_value" Type="float" Nullable="false" />
+          <Property Name="Delivery_cost" Type="float" Nullable="false" />
+          <Property Name="Discount" Type="int" Nullable="false" />
+          <Property Name="Pay_value" Type="float" Nullable="false" />
         </EntityType>
-        <EntityType Name="Product">
+        <EntityType Name="Products">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -58,136 +70,110 @@
           <Property Name="Name" Type="varchar" MaxLength="40" Nullable="false" />
           <Property Name="Unit_price" Type="float" Nullable="false" />
           <Property Name="Quantity" Type="int" Nullable="false" />
-          <Property Name="War_id" Type="int" Nullable="false" />
-          <Property Name="Producer_id" Type="int" Nullable="false" />
         </EntityType>
-        <EntityType Name="Warehouse">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
-          <Property Name="Name" Type="varchar" MaxLength="40" Nullable="false" />
-          <Property Name="City" Type="varchar" MaxLength="40" Nullable="false" />
-        </EntityType>
-        <Association Name="FK__Orders__Cli_id__5EBF139D">
-          <End Role="Client" Type="Self.Client" Multiplicity="1" />
-          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+        <Association Name="FK__OrderDeta__Order__1332DBDC">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="0..1" />
+          <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Client">
+            <Principal Role="Orders">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Order">
-              <PropertyRef Name="Cli_id" />
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="Order_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Orders__Del_id__5FB337D6">
-          <End Role="Delivery type" Type="Self.Delivery type" Multiplicity="1" />
-          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+        <Association Name="FK__OrderDeta__Produ__14270015">
+          <End Role="Products" Type="Self.Products" Multiplicity="0..1" />
+          <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Delivery type">
+            <Principal Role="Products">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Order">
-              <PropertyRef Name="Del_id" />
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="Product_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Orders__Pay_id__60A75C0F">
-          <End Role="Payment" Type="Self.Payment" Multiplicity="1" />
-          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+        <Association Name="FK__Orders__Client_i__0A9D95DB">
+          <End Role="Clients" Type="Self.Clients" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Payment">
+            <Principal Role="Clients">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Order">
-              <PropertyRef Name="Pay_id" />
+            <Dependent Role="Orders">
+              <PropertyRef Name="Client_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Orders__Pro_id__619B8048">
-          <End Role="Product" Type="Self.Product" Multiplicity="1" />
-          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+        <Association Name="FK__Orders__Delivery__0B91BA14">
+          <End Role="Delivery types" Type="Self.Delivery types" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Product">
+            <Principal Role="Delivery types">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Order">
-              <PropertyRef Name="Pro_id" />
+            <Dependent Role="Orders">
+              <PropertyRef Name="DeliveryType_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PRODUCERS__WAR_I__3F466844">
-          <End Role="Warehouse" Type="Self.Warehouse" Multiplicity="1" />
-          <End Role="Producer" Type="Self.Producer" Multiplicity="*" />
+        <Association Name="FK__Orders__PayType___0C85DE4D">
+          <End Role="Payment types" Type="Self.Payment types" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Warehouse">
+            <Principal Role="Payment types">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Producer">
-              <PropertyRef Name="War_id" />
+            <Dependent Role="Orders">
+              <PropertyRef Name="PayType_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PRODUCTS__PRODUC__4316F928">
-          <End Role="Producer" Type="Self.Producer" Multiplicity="1" />
-          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+        <Association Name="FK__Payments__Ord_id__10566F31">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="1" />
+          <End Role="Payments" Type="Self.Payments" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Producer">
+            <Principal Role="Orders">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Product">
-              <PropertyRef Name="Producer_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__PRODUCTS__WAR_ID__4222D4EF">
-          <End Role="Warehouse" Type="Self.Warehouse" Multiplicity="1" />
-          <End Role="Product" Type="Self.Product" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Warehouse">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Product">
-              <PropertyRef Name="War_id" />
+            <Dependent Role="Payments">
+              <PropertyRef Name="Ord_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="KickerShopModelStoreContainer">
-          <EntitySet Name="Client" EntityType="Self.Client" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Delivery type" EntityType="Self.Delivery type" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Order" EntityType="Self.Order" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Payment" EntityType="Self.Payment" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Producer" EntityType="Self.Producer" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="Warehouse" EntityType="Self.Warehouse" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__Orders__Cli_id__5EBF139D" Association="Self.FK__Orders__Cli_id__5EBF139D">
-            <End Role="Client" EntitySet="Client" />
-            <End Role="Order" EntitySet="Order" />
+          <EntitySet Name="Clients" EntityType="Self.Clients" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Delivery types" EntityType="Self.Delivery types" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="OrderDetails" EntityType="Self.OrderDetails" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Orders" EntityType="Self.Orders" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Payment types" EntityType="Self.Payment types" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Payments" EntityType="Self.Payments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__OrderDeta__Order__1332DBDC" Association="Self.FK__OrderDeta__Order__1332DBDC">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
           </AssociationSet>
-          <AssociationSet Name="FK__Orders__Del_id__5FB337D6" Association="Self.FK__Orders__Del_id__5FB337D6">
-            <End Role="Delivery type" EntitySet="Delivery type" />
-            <End Role="Order" EntitySet="Order" />
+          <AssociationSet Name="FK__OrderDeta__Produ__14270015" Association="Self.FK__OrderDeta__Produ__14270015">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
           </AssociationSet>
-          <AssociationSet Name="FK__Orders__Pay_id__60A75C0F" Association="Self.FK__Orders__Pay_id__60A75C0F">
-            <End Role="Payment" EntitySet="Payment" />
-            <End Role="Order" EntitySet="Order" />
+          <AssociationSet Name="FK__Orders__Client_i__0A9D95DB" Association="Self.FK__Orders__Client_i__0A9D95DB">
+            <End Role="Clients" EntitySet="Clients" />
+            <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
-          <AssociationSet Name="FK__Orders__Pro_id__619B8048" Association="Self.FK__Orders__Pro_id__619B8048">
-            <End Role="Product" EntitySet="Product" />
-            <End Role="Order" EntitySet="Order" />
+          <AssociationSet Name="FK__Orders__Delivery__0B91BA14" Association="Self.FK__Orders__Delivery__0B91BA14">
+            <End Role="Delivery types" EntitySet="Delivery types" />
+            <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
-          <AssociationSet Name="FK__PRODUCERS__WAR_I__3F466844" Association="Self.FK__PRODUCERS__WAR_I__3F466844">
-            <End Role="Warehouse" EntitySet="Warehouse" />
-            <End Role="Producer" EntitySet="Producer" />
+          <AssociationSet Name="FK__Orders__PayType___0C85DE4D" Association="Self.FK__Orders__PayType___0C85DE4D">
+            <End Role="Payment types" EntitySet="Payment types" />
+            <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
-          <AssociationSet Name="FK__PRODUCTS__PRODUC__4316F928" Association="Self.FK__PRODUCTS__PRODUC__4316F928">
-            <End Role="Producer" EntitySet="Producer" />
-            <End Role="Product" EntitySet="Product" />
-          </AssociationSet>
-          <AssociationSet Name="FK__PRODUCTS__WAR_ID__4222D4EF" Association="Self.FK__PRODUCTS__WAR_ID__4222D4EF">
-            <End Role="Warehouse" EntitySet="Warehouse" />
-            <End Role="Product" EntitySet="Product" />
+          <AssociationSet Name="FK__Payments__Ord_id__10566F31" Association="Self.FK__Payments__Ord_id__10566F31">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="Payments" EntitySet="Payments" />
           </AssociationSet>
         </EntityContainer>
       </Schema>
@@ -195,7 +181,7 @@
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="KickerShopModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="Client">
+        <EntityType Name="Clients">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -205,51 +191,65 @@
           <Property Name="Email" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="City" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="Zip" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="Order" Relationship="Self.FK__Orders__Cli_id__5EBF139D" FromRole="Client" ToRole="Order" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK__Orders__Client_i__0A9D95DB" FromRole="Clients" ToRole="Orders" />
         </EntityType>
-        <EntityType Name="Delivery_type">
+        <EntityType Name="Delivery_types">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Price" Type="Double" Nullable="false" />
-          <NavigationProperty Name="Order" Relationship="Self.FK__Orders__Del_id__5FB337D6" FromRole="Delivery_type" ToRole="Order" />
+          <Property Name="Unit_price" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK__Orders__Delivery__0B91BA14" FromRole="Delivery_types" ToRole="Orders" />
         </EntityType>
-        <EntityType Name="Order">
+        <EntityType Name="OrderDetails">
+          <Key>
+            <PropertyRef Name="OrderDetail_id" />
+          </Key>
+          <Property Name="OrderDetail_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Order_id" Type="Int32" />
+          <Property Name="Product_id" Type="Int32" />
+          <Property Name="Quantity" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK__OrderDeta__Order__1332DBDC" FromRole="OrderDetails" ToRole="Orders" />
+          <NavigationProperty Name="Products" Relationship="Self.FK__OrderDeta__Produ__14270015" FromRole="OrderDetails" ToRole="Products" />
+        </EntityType>
+        <EntityType Name="Orders">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="Cli_id" Type="Int32" Nullable="false" />
-          <Property Name="Del_id" Type="Int32" Nullable="false" />
-          <Property Name="Pay_id" Type="Int32" Nullable="false" />
-          <Property Name="Pro_id" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Client" Relationship="Self.FK__Orders__Cli_id__5EBF139D" FromRole="Order" ToRole="Client" />
-          <NavigationProperty Name="Delivery_type" Relationship="Self.FK__Orders__Del_id__5FB337D6" FromRole="Order" ToRole="Delivery_type" />
-          <NavigationProperty Name="Payment" Relationship="Self.FK__Orders__Pay_id__60A75C0F" FromRole="Order" ToRole="Payment" />
-          <NavigationProperty Name="Product" Relationship="Self.FK__Orders__Pro_id__619B8048" FromRole="Order" ToRole="Product" />
+          <Property Name="OrderDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Client_id" Type="Int32" Nullable="false" />
+          <Property Name="DeliveryType_id" Type="Int32" Nullable="false" />
+          <Property Name="PayType_id" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Clients" Relationship="Self.FK__Orders__Client_i__0A9D95DB" FromRole="Orders" ToRole="Clients" />
+          <NavigationProperty Name="Delivery_types" Relationship="Self.FK__Orders__Delivery__0B91BA14" FromRole="Orders" ToRole="Delivery_types" />
+          <NavigationProperty Name="OrderDetails" Relationship="Self.FK__OrderDeta__Order__1332DBDC" FromRole="Orders" ToRole="OrderDetails" />
+          <NavigationProperty Name="Payment_types" Relationship="Self.FK__Orders__PayType___0C85DE4D" FromRole="Orders" ToRole="Payment_types" />
+          <NavigationProperty Name="Payments" Relationship="Self.FK__Payments__Ord_id__10566F31" FromRole="Orders" ToRole="Payments" />
         </EntityType>
-        <EntityType Name="Payment">
+        <EntityType Name="Payment_types">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Price" Type="Double" Nullable="false" />
-          <NavigationProperty Name="Order" Relationship="Self.FK__Orders__Pay_id__60A75C0F" FromRole="Payment" ToRole="Order" />
+          <Property Name="Unit_price" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK__Orders__PayType___0C85DE4D" FromRole="Payment_types" ToRole="Orders" />
         </EntityType>
-        <EntityType Name="Producer">
+        <EntityType Name="Payments">
           <Key>
-            <PropertyRef Name="Id" />
+            <PropertyRef Name="Payment_id" />
           </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="War_id" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Warehouse" Relationship="Self.FK__PRODUCERS__WAR_I__3F466844" FromRole="Producer" ToRole="Warehouse" />
-          <NavigationProperty Name="Product" Relationship="Self.FK__PRODUCTS__PRODUC__4316F928" FromRole="Producer" ToRole="Product" />
+          <Property Name="Payment_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Ord_id" Type="Int32" Nullable="false" />
+          <Property Name="Total_value" Type="Double" Nullable="false" />
+          <Property Name="Delivery_cost" Type="Double" Nullable="false" />
+          <Property Name="Discount" Type="Int32" Nullable="false" />
+          <Property Name="Pay_value" Type="Double" Nullable="false" />
+          <NavigationProperty Name="Orders" Relationship="Self.FK__Payments__Ord_id__10566F31" FromRole="Payments" ToRole="Orders" />
         </EntityType>
-        <EntityType Name="Product">
+        <EntityType Name="Products">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
@@ -257,141 +257,111 @@
           <Property Name="Name" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Unit_price" Type="Double" Nullable="false" />
           <Property Name="Quantity" Type="Int32" Nullable="false" />
-          <Property Name="War_id" Type="Int32" Nullable="false" />
-          <Property Name="Producer_id" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="Order" Relationship="Self.FK__Orders__Pro_id__619B8048" FromRole="Product" ToRole="Order" />
-          <NavigationProperty Name="Producer" Relationship="Self.FK__PRODUCTS__PRODUC__4316F928" FromRole="Product" ToRole="Producer" />
-          <NavigationProperty Name="Warehouse" Relationship="Self.FK__PRODUCTS__WAR_ID__4222D4EF" FromRole="Product" ToRole="Warehouse" />
+          <NavigationProperty Name="OrderDetails" Relationship="Self.FK__OrderDeta__Produ__14270015" FromRole="Products" ToRole="OrderDetails" />
         </EntityType>
-        <EntityType Name="Warehouse">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="City" Type="String" MaxLength="40" FixedLength="false" Unicode="false" Nullable="false" />
-          <NavigationProperty Name="Producer" Relationship="Self.FK__PRODUCERS__WAR_I__3F466844" FromRole="Warehouse" ToRole="Producer" />
-          <NavigationProperty Name="Product" Relationship="Self.FK__PRODUCTS__WAR_ID__4222D4EF" FromRole="Warehouse" ToRole="Product" />
-        </EntityType>
-        <Association Name="FK__Orders__Cli_id__5EBF139D">
-          <End Role="Client" Type="Self.Client" Multiplicity="1" />
-          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+        <Association Name="FK__Orders__Client_i__0A9D95DB">
+          <End Role="Clients" Type="Self.Clients" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Client">
+            <Principal Role="Clients">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Order">
-              <PropertyRef Name="Cli_id" />
+            <Dependent Role="Orders">
+              <PropertyRef Name="Client_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Orders__Del_id__5FB337D6">
-          <End Role="Delivery_type" Type="Self.Delivery_type" Multiplicity="1" />
-          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+        <Association Name="FK__Orders__Delivery__0B91BA14">
+          <End Role="Delivery_types" Type="Self.Delivery_types" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Delivery_type">
+            <Principal Role="Delivery_types">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Order">
-              <PropertyRef Name="Del_id" />
+            <Dependent Role="Orders">
+              <PropertyRef Name="DeliveryType_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Orders__Pay_id__60A75C0F">
-          <End Role="Payment" Type="Self.Payment" Multiplicity="1" />
-          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+        <Association Name="FK__OrderDeta__Order__1332DBDC">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="0..1" />
+          <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Payment">
+            <Principal Role="Orders">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Order">
-              <PropertyRef Name="Pay_id" />
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="Order_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Orders__Pro_id__619B8048">
-          <End Role="Product" Type="Self.Product" Multiplicity="1" />
-          <End Role="Order" Type="Self.Order" Multiplicity="*" />
+        <Association Name="FK__OrderDeta__Produ__14270015">
+          <End Role="Products" Type="Self.Products" Multiplicity="0..1" />
+          <End Role="OrderDetails" Type="Self.OrderDetails" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Product">
+            <Principal Role="Products">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Order">
-              <PropertyRef Name="Pro_id" />
+            <Dependent Role="OrderDetails">
+              <PropertyRef Name="Product_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PRODUCERS__WAR_I__3F466844">
-          <End Role="Warehouse" Type="Self.Warehouse" Multiplicity="1" />
-          <End Role="Producer" Type="Self.Producer" Multiplicity="*" />
+        <Association Name="FK__Orders__PayType___0C85DE4D">
+          <End Role="Payment_types" Type="Self.Payment_types" Multiplicity="1" />
+          <End Role="Orders" Type="Self.Orders" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Warehouse">
+            <Principal Role="Payment_types">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Producer">
-              <PropertyRef Name="War_id" />
+            <Dependent Role="Orders">
+              <PropertyRef Name="PayType_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__PRODUCTS__PRODUC__4316F928">
-          <End Role="Producer" Type="Self.Producer" Multiplicity="1" />
-          <End Role="Product" Type="Self.Product" Multiplicity="*" />
+        <Association Name="FK__Payments__Ord_id__10566F31">
+          <End Role="Orders" Type="Self.Orders" Multiplicity="1" />
+          <End Role="Payments" Type="Self.Payments" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Producer">
+            <Principal Role="Orders">
               <PropertyRef Name="Id" />
             </Principal>
-            <Dependent Role="Product">
-              <PropertyRef Name="Producer_id" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="FK__PRODUCTS__WAR_ID__4222D4EF">
-          <End Role="Warehouse" Type="Self.Warehouse" Multiplicity="1" />
-          <End Role="Product" Type="Self.Product" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Warehouse">
-              <PropertyRef Name="Id" />
-            </Principal>
-            <Dependent Role="Product">
-              <PropertyRef Name="War_id" />
+            <Dependent Role="Payments">
+              <PropertyRef Name="Ord_id" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
         <EntityContainer Name="KickerShopEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="Client" EntityType="Self.Client" />
-          <EntitySet Name="Delivery_type" EntityType="Self.Delivery_type" />
-          <EntitySet Name="Order" EntityType="Self.Order" />
-          <EntitySet Name="Payment" EntityType="Self.Payment" />
-          <EntitySet Name="Producer" EntityType="Self.Producer" />
-          <EntitySet Name="Product" EntityType="Self.Product" />
-          <EntitySet Name="Warehouse" EntityType="Self.Warehouse" />
-          <AssociationSet Name="FK__Orders__Cli_id__5EBF139D" Association="Self.FK__Orders__Cli_id__5EBF139D">
-            <End Role="Client" EntitySet="Client" />
-            <End Role="Order" EntitySet="Order" />
+          <EntitySet Name="Clients" EntityType="Self.Clients" />
+          <EntitySet Name="Delivery_types" EntityType="Self.Delivery_types" />
+          <EntitySet Name="OrderDetails" EntityType="Self.OrderDetails" />
+          <EntitySet Name="Orders" EntityType="Self.Orders" />
+          <EntitySet Name="Payment_types" EntityType="Self.Payment_types" />
+          <EntitySet Name="Payments" EntityType="Self.Payments" />
+          <EntitySet Name="Products" EntityType="Self.Products" />
+          <AssociationSet Name="FK__Orders__Client_i__0A9D95DB" Association="Self.FK__Orders__Client_i__0A9D95DB">
+            <End Role="Clients" EntitySet="Clients" />
+            <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
-          <AssociationSet Name="FK__Orders__Del_id__5FB337D6" Association="Self.FK__Orders__Del_id__5FB337D6">
-            <End Role="Delivery_type" EntitySet="Delivery_type" />
-            <End Role="Order" EntitySet="Order" />
+          <AssociationSet Name="FK__Orders__Delivery__0B91BA14" Association="Self.FK__Orders__Delivery__0B91BA14">
+            <End Role="Delivery_types" EntitySet="Delivery_types" />
+            <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
-          <AssociationSet Name="FK__Orders__Pay_id__60A75C0F" Association="Self.FK__Orders__Pay_id__60A75C0F">
-            <End Role="Payment" EntitySet="Payment" />
-            <End Role="Order" EntitySet="Order" />
+          <AssociationSet Name="FK__OrderDeta__Order__1332DBDC" Association="Self.FK__OrderDeta__Order__1332DBDC">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
           </AssociationSet>
-          <AssociationSet Name="FK__Orders__Pro_id__619B8048" Association="Self.FK__Orders__Pro_id__619B8048">
-            <End Role="Product" EntitySet="Product" />
-            <End Role="Order" EntitySet="Order" />
+          <AssociationSet Name="FK__OrderDeta__Produ__14270015" Association="Self.FK__OrderDeta__Produ__14270015">
+            <End Role="Products" EntitySet="Products" />
+            <End Role="OrderDetails" EntitySet="OrderDetails" />
           </AssociationSet>
-          <AssociationSet Name="FK__PRODUCERS__WAR_I__3F466844" Association="Self.FK__PRODUCERS__WAR_I__3F466844">
-            <End Role="Warehouse" EntitySet="Warehouse" />
-            <End Role="Producer" EntitySet="Producer" />
+          <AssociationSet Name="FK__Orders__PayType___0C85DE4D" Association="Self.FK__Orders__PayType___0C85DE4D">
+            <End Role="Payment_types" EntitySet="Payment_types" />
+            <End Role="Orders" EntitySet="Orders" />
           </AssociationSet>
-          <AssociationSet Name="FK__PRODUCTS__PRODUC__4316F928" Association="Self.FK__PRODUCTS__PRODUC__4316F928">
-            <End Role="Producer" EntitySet="Producer" />
-            <End Role="Product" EntitySet="Product" />
-          </AssociationSet>
-          <AssociationSet Name="FK__PRODUCTS__WAR_ID__4222D4EF" Association="Self.FK__PRODUCTS__WAR_ID__4222D4EF">
-            <End Role="Warehouse" EntitySet="Warehouse" />
-            <End Role="Product" EntitySet="Product" />
+          <AssociationSet Name="FK__Payments__Ord_id__10566F31" Association="Self.FK__Payments__Ord_id__10566F31">
+            <End Role="Orders" EntitySet="Orders" />
+            <End Role="Payments" EntitySet="Payments" />
           </AssociationSet>
         </EntityContainer>
       </Schema>
@@ -400,9 +370,9 @@
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="KickerShopModelStoreContainer" CdmEntityContainer="KickerShopEntities">
-          <EntitySetMapping Name="Client">
-            <EntityTypeMapping TypeName="KickerShopModel.Client">
-              <MappingFragment StoreEntitySet="Client">
+          <EntitySetMapping Name="Clients">
+            <EntityTypeMapping TypeName="KickerShopModel.Clients">
+              <MappingFragment StoreEntitySet="Clients">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Street" ColumnName="Street" />
@@ -412,62 +382,64 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Delivery_type">
-            <EntityTypeMapping TypeName="KickerShopModel.Delivery_type">
-              <MappingFragment StoreEntitySet="Delivery type">
+          <EntitySetMapping Name="Delivery_types">
+            <EntityTypeMapping TypeName="KickerShopModel.Delivery_types">
+              <MappingFragment StoreEntitySet="Delivery types">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Unit_price" ColumnName="Unit_price" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Order">
-            <EntityTypeMapping TypeName="KickerShopModel.Order">
-              <MappingFragment StoreEntitySet="Order">
+          <EntitySetMapping Name="OrderDetails">
+            <EntityTypeMapping TypeName="KickerShopModel.OrderDetails">
+              <MappingFragment StoreEntitySet="OrderDetails">
+                <ScalarProperty Name="OrderDetail_id" ColumnName="OrderDetail_id" />
+                <ScalarProperty Name="Order_id" ColumnName="Order_id" />
+                <ScalarProperty Name="Product_id" ColumnName="Product_id" />
+                <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Orders">
+            <EntityTypeMapping TypeName="KickerShopModel.Orders">
+              <MappingFragment StoreEntitySet="Orders">
                 <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Cli_id" ColumnName="Cli_id" />
-                <ScalarProperty Name="Del_id" ColumnName="Del_id" />
-                <ScalarProperty Name="Pay_id" ColumnName="Pay_id" />
-                <ScalarProperty Name="Pro_id" ColumnName="Pro_id" />
+                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+                <ScalarProperty Name="Client_id" ColumnName="Client_id" />
+                <ScalarProperty Name="DeliveryType_id" ColumnName="DeliveryType_id" />
+                <ScalarProperty Name="PayType_id" ColumnName="PayType_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Payment">
-            <EntityTypeMapping TypeName="KickerShopModel.Payment">
-              <MappingFragment StoreEntitySet="Payment">
+          <EntitySetMapping Name="Payment_types">
+            <EntityTypeMapping TypeName="KickerShopModel.Payment_types">
+              <MappingFragment StoreEntitySet="Payment types">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Unit_price" ColumnName="Unit_price" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Producer">
-            <EntityTypeMapping TypeName="KickerShopModel.Producer">
-              <MappingFragment StoreEntitySet="Producer">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="War_id" ColumnName="War_id" />
+          <EntitySetMapping Name="Payments">
+            <EntityTypeMapping TypeName="KickerShopModel.Payments">
+              <MappingFragment StoreEntitySet="Payments">
+                <ScalarProperty Name="Payment_id" ColumnName="Payment_id" />
+                <ScalarProperty Name="Ord_id" ColumnName="Ord_id" />
+                <ScalarProperty Name="Total_value" ColumnName="Total_value" />
+                <ScalarProperty Name="Delivery_cost" ColumnName="Delivery_cost" />
+                <ScalarProperty Name="Discount" ColumnName="Discount" />
+                <ScalarProperty Name="Pay_value" ColumnName="Pay_value" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="Product">
-            <EntityTypeMapping TypeName="KickerShopModel.Product">
-              <MappingFragment StoreEntitySet="Product">
+          <EntitySetMapping Name="Products">
+            <EntityTypeMapping TypeName="KickerShopModel.Products">
+              <MappingFragment StoreEntitySet="Products">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Unit_price" ColumnName="Unit_price" />
                 <ScalarProperty Name="Quantity" ColumnName="Quantity" />
-                <ScalarProperty Name="War_id" ColumnName="War_id" />
-                <ScalarProperty Name="Producer_id" ColumnName="Producer_id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="Warehouse">
-            <EntityTypeMapping TypeName="KickerShopModel.Warehouse">
-              <MappingFragment StoreEntitySet="Warehouse">
-                <ScalarProperty Name="Id" ColumnName="Id" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="City" ColumnName="City" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

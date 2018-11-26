@@ -17,8 +17,8 @@ namespace KickerShop.Controllers
         // GET: Orders
         public ActionResult Index()
         {
-            var order = db.OrderSet.Include(o => o.Client).Include(o => o.Delivery_type).Include(o => o.Payment).Include(o => o.Product);
-            return View(order.ToList());
+            var orders = db.OrderSet.Include(o => o.Clients).Include(o => o.Delivery_types).Include(o => o.Payment_types);
+            return View(orders.ToList());
         }
 
         // GET: Orders/Details/5
@@ -28,21 +28,20 @@ namespace KickerShop.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Order order = db.OrderSet.Find(id);
-            if (order == null)
+            Orders orders = db.OrderSet.Find(id);
+            if (orders == null)
             {
                 return HttpNotFound();
             }
-            return View(order);
+            return View(orders);
         }
 
         // GET: Orders/Create
         public ActionResult Create()
         {
-            ViewBag.Cli_id = new SelectList(db.ClientSet, "Id", "Name");
-            ViewBag.Del_id = new SelectList(db.Delivery_typeSet, "Id", "Name");
-            ViewBag.Pay_id = new SelectList(db.PaymentSet, "Id", "Name");
-            ViewBag.Pro_id = new SelectList(db.ProductSet, "Id", "Name");
+            ViewBag.Client_id = new SelectList(db.ClientSet, "Id", "Name");
+            ViewBag.DeliveryType_id = new SelectList(db.Delivery_typeSet, "Id", "Name");
+            ViewBag.PayType_id = new SelectList(db.Payment_typeSet, "Id", "Name");
             return View();
         }
 
@@ -51,36 +50,19 @@ namespace KickerShop.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Cli_id,Del_id,Pay_id,Pro_id")] Order order)
+        public ActionResult Create([Bind(Include = "Id,OrderDate,Client_id,DeliveryType_id,PayType_id")] Orders orders)
         {
             if (ModelState.IsValid)
             {
-                try
-                {
-                    db.OrderSet.Add(order);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
-                }
-                catch (Exception e)
-                {
-                    string msg = null;
-                    if (e.InnerException == null)
-                        msg = "Invalid order data";
-                    else
-                        msg = e.InnerException.InnerException.Message;
-                    ViewBag.Error = msg;
-                    ViewBag.Cli_id = new SelectList(db.ClientSet, "Id", "Name", order.Cli_id);
-                    ViewBag.Del_id = new SelectList(db.Delivery_typeSet, "Id", "Name", order.Del_id);
-                    ViewBag.Pay_id = new SelectList(db.PaymentSet, "Id", "Name", order.Pay_id);
-                    ViewBag.Pro_id = new SelectList(db.ProductSet, "Id", "Name", order.Pro_id);
-                    return View(order);
-                }
+                db.OrderSet.Add(orders);
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
-            ViewBag.Cli_id = new SelectList(db.ClientSet, "Id", "Name", order.Cli_id);
-            ViewBag.Del_id = new SelectList(db.Delivery_typeSet, "Id", "Name", order.Del_id);
-            ViewBag.Pay_id = new SelectList(db.PaymentSet, "Id", "Name", order.Pay_id);
-            ViewBag.Pro_id = new SelectList(db.ProductSet, "Id", "Name", order.Pro_id);
-            return View(order);
+
+            ViewBag.Client_id = new SelectList(db.ClientSet, "Id", "Name", orders.Client_id);
+            ViewBag.DeliveryType_id = new SelectList(db.Delivery_typeSet, "Id", "Name", orders.DeliveryType_id);
+            ViewBag.PayType_id = new SelectList(db.Payment_typeSet, "Id", "Name", orders.PayType_id);
+            return View(orders);
         }
 
         // GET: Orders/Edit/5
@@ -90,16 +72,15 @@ namespace KickerShop.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Order order = db.OrderSet.Find(id);
-            if (order == null)
+            Orders orders = db.OrderSet.Find(id);
+            if (orders == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.Cli_id = new SelectList(db.ClientSet, "Id", "Name", order.Cli_id);
-            ViewBag.Del_id = new SelectList(db.Delivery_typeSet, "Id", "Name", order.Del_id);
-            ViewBag.Pay_id = new SelectList(db.PaymentSet, "Id", "Name", order.Pay_id);
-            ViewBag.Pro_id = new SelectList(db.ProductSet, "Id", "Name", order.Pro_id);
-            return View(order);
+            ViewBag.Client_id = new SelectList(db.ClientSet, "Id", "Name", orders.Client_id);
+            ViewBag.DeliveryType_id = new SelectList(db.Delivery_typeSet, "Id", "Name", orders.DeliveryType_id);
+            ViewBag.PayType_id = new SelectList(db.Payment_typeSet, "Id", "Name", orders.PayType_id);
+            return View(orders);
         }
 
         // POST: Orders/Edit/5
@@ -107,19 +88,18 @@ namespace KickerShop.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Cli_id,Del_id,Pay_id,Pro_id")] Order order)
+        public ActionResult Edit([Bind(Include = "Id,OrderDate,Client_id,DeliveryType_id,PayType_id")] Orders orders)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(order).State = EntityState.Modified;
+                db.Entry(orders).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.Cli_id = new SelectList(db.ClientSet, "Id", "Name", order.Cli_id);
-            ViewBag.Del_id = new SelectList(db.Delivery_typeSet, "Id", "Name", order.Del_id);
-            ViewBag.Pay_id = new SelectList(db.PaymentSet, "Id", "Name", order.Pay_id);
-            ViewBag.Pro_id = new SelectList(db.ProductSet, "Id", "Name", order.Pro_id);
-            return View(order);
+            ViewBag.Client_id = new SelectList(db.ClientSet, "Id", "Name", orders.Client_id);
+            ViewBag.DeliveryType_id = new SelectList(db.Delivery_typeSet, "Id", "Name", orders.DeliveryType_id);
+            ViewBag.PayType_id = new SelectList(db.Payment_typeSet, "Id", "Name", orders.PayType_id);
+            return View(orders);
         }
 
         // GET: Orders/Delete/5
@@ -129,12 +109,12 @@ namespace KickerShop.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Order order = db.OrderSet.Find(id);
-            if (order == null)
+            Orders orders = db.OrderSet.Find(id);
+            if (orders == null)
             {
                 return HttpNotFound();
             }
-            return View(order);
+            return View(orders);
         }
 
         // POST: Orders/Delete/5
@@ -142,8 +122,8 @@ namespace KickerShop.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Order order = db.OrderSet.Find(id);
-            db.OrderSet.Remove(order);
+            Orders orders = db.OrderSet.Find(id);
+            db.OrderSet.Remove(orders);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

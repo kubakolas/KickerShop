@@ -17,7 +17,8 @@ namespace KickerShop.Controllers
         // GET: Payments
         public ActionResult Index()
         {
-            return View(db.PaymentSet.ToList());
+            var payments = db.PaymentSet.Include(p => p.Orders);
+            return View(payments.ToList());
         }
 
         // GET: Payments/Details/5
@@ -27,17 +28,18 @@ namespace KickerShop.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Payment payment = db.PaymentSet.Find(id);
-            if (payment == null)
+            Payments payments = db.PaymentSet.Find(id);
+            if (payments == null)
             {
                 return HttpNotFound();
             }
-            return View(payment);
+            return View(payments);
         }
 
         // GET: Payments/Create
         public ActionResult Create()
         {
+            ViewBag.Ord_id = new SelectList(db.OrderSet, "Id", "Id");
             return View();
         }
 
@@ -46,29 +48,17 @@ namespace KickerShop.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Price")] Payment payment)
+        public ActionResult Create([Bind(Include = "Payment_id,Ord_id,Total_value,Delivery_cost,Discount,Pay_value")] Payments payments)
         {
             if (ModelState.IsValid)
             {
-                try
-                {
-                    db.PaymentSet.Add(payment);
-                    db.SaveChanges();
-                    return RedirectToAction("Index");
-                }
-                catch (Exception e)
-                {
-                    string msg = null;
-                    if (e.InnerException == null)
-                        msg = "Invalid payment data";
-                    else
-                        msg = e.InnerException.InnerException.Message;
-                    ViewBag.Error = msg;
-                    return View(payment);
-                }
+                db.PaymentSet.Add(payments);
+                db.SaveChanges();
+                return RedirectToAction("Index");
             }
 
-            return View(payment);
+            ViewBag.Ord_id = new SelectList(db.OrderSet, "Id", "Id", payments.Ord_id);
+            return View(payments);
         }
 
         // GET: Payments/Edit/5
@@ -78,12 +68,13 @@ namespace KickerShop.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Payment payment = db.PaymentSet.Find(id);
-            if (payment == null)
+            Payments payments = db.PaymentSet.Find(id);
+            if (payments == null)
             {
                 return HttpNotFound();
             }
-            return View(payment);
+            ViewBag.Ord_id = new SelectList(db.OrderSet, "Id", "Id", payments.Ord_id);
+            return View(payments);
         }
 
         // POST: Payments/Edit/5
@@ -91,15 +82,16 @@ namespace KickerShop.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Price")] Payment payment)
+        public ActionResult Edit([Bind(Include = "Payment_id,Ord_id,Total_value,Delivery_cost,Discount,Pay_value")] Payments payments)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(payment).State = EntityState.Modified;
+                db.Entry(payments).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(payment);
+            ViewBag.Ord_id = new SelectList(db.OrderSet, "Id", "Id", payments.Ord_id);
+            return View(payments);
         }
 
         // GET: Payments/Delete/5
@@ -109,12 +101,12 @@ namespace KickerShop.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Payment payment = db.PaymentSet.Find(id);
-            if (payment == null)
+            Payments payments = db.PaymentSet.Find(id);
+            if (payments == null)
             {
                 return HttpNotFound();
             }
-            return View(payment);
+            return View(payments);
         }
 
         // POST: Payments/Delete/5
@@ -122,8 +114,8 @@ namespace KickerShop.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Payment payment = db.PaymentSet.Find(id);
-            db.PaymentSet.Remove(payment);
+            Payments payments = db.PaymentSet.Find(id);
+            db.PaymentSet.Remove(payments);
             db.SaveChanges();
             return RedirectToAction("Index");
         }

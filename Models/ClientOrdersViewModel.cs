@@ -7,7 +7,7 @@ namespace KickerShop.Models
 {
     public class ClientOrdersViewModel
     {
-        public Client client{ get; set; }
-        public IEnumerable<Order> orders { get; set; }
+        public Clients client{ get; set; }
+        public IEnumerable<Orders> orders { get; set; }
     }
 }

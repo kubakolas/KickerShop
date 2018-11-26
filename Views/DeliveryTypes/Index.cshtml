@@ -1,4 +1,4 @@
-﻿@model IEnumerable<KickerShop.Models.Products>
+﻿@model IEnumerable<KickerShop.Models.Delivery_types>
 
 @{
     ViewBag.Title = "Index";
@@ -18,9 +18,6 @@
         <th>
             @Html.DisplayNameFor(model => model.Unit_price)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Quantity)
-        </th>
         <th></th>
     </tr>
 
@@ -31,9 +28,6 @@
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Unit_price)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Quantity)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |

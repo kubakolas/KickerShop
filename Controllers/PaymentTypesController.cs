@@ -10,107 +10,107 @@ using KickerShop.Models;
 
 namespace KickerShop.Controllers
 {
-    public class ProductsController : Controller
+    public class PaymentTypesController : Controller
     {
         private KickerShopEntities db = new KickerShopEntities();
 
-        // GET: Products
+        // GET: PaymentTypes
         public ActionResult Index()
         {
-            return View(db.ProductSet.ToList());
+            return View(db.Payment_typeSet.ToList());
         }
 
-        // GET: Products/Details/5
+        // GET: PaymentTypes/Details/5
         public ActionResult Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Products products = db.ProductSet.Find(id);
-            if (products == null)
+            Payment_types payment_types = db.Payment_typeSet.Find(id);
+            if (payment_types == null)
             {
                 return HttpNotFound();
             }
-            return View(products);
+            return View(payment_types);
         }
 
-        // GET: Products/Create
+        // GET: PaymentTypes/Create
         public ActionResult Create()
         {
             return View();
         }
 
-        // POST: Products/Create
+        // POST: PaymentTypes/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,Name,Unit_price,Quantity")] Products products)
+        public ActionResult Create([Bind(Include = "Id,Name,Unit_price")] Payment_types payment_types)
         {
             if (ModelState.IsValid)
             {
-                db.ProductSet.Add(products);
+                db.Payment_typeSet.Add(payment_types);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(products);
+            return View(payment_types);
         }
 
-        // GET: Products/Edit/5
+        // GET: PaymentTypes/Edit/5
         public ActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Products products = db.ProductSet.Find(id);
-            if (products == null)
+            Payment_types payment_types = db.Payment_typeSet.Find(id);
+            if (payment_types == null)
             {
                 return HttpNotFound();
             }
-            return View(products);
+            return View(payment_types);
         }
 
-        // POST: Products/Edit/5
+        // POST: PaymentTypes/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,Name,Unit_price,Quantity")] Products products)
+        public ActionResult Edit([Bind(Include = "Id,Name,Unit_price")] Payment_types payment_types)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(products).State = EntityState.Modified;
+                db.Entry(payment_types).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(products);
+            return View(payment_types);
         }
 
-        // GET: Products/Delete/5
+        // GET: PaymentTypes/Delete/5
         public ActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Products products = db.ProductSet.Find(id);
-            if (products == null)
+            Payment_types payment_types = db.Payment_typeSet.Find(id);
+            if (payment_types == null)
             {
                 return HttpNotFound();
             }
-            return View(products);
+            return View(payment_types);
         }
 
-        // POST: Products/Delete/5
+        // POST: PaymentTypes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Products products = db.ProductSet.Find(id);
-            db.ProductSet.Remove(products);
+            Payment_types payment_types = db.Payment_typeSet.Find(id);
+            db.Payment_typeSet.Remove(payment_types);
             db.SaveChanges();
             return RedirectToAction("Index");
         }
