@@ -52,6 +52,7 @@ namespace KickerShop.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,OrderDate,Client_id,DeliveryType_id,PayType_id")] Orders orders)
         {
+            orders.OrderDate = DateTime.Now;
             if (ModelState.IsValid)
             {
                 db.OrderSet.Add(orders);
