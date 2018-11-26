@@ -9,5 +9,6 @@ namespace KickerShop.Models
     {
         public Clients client{ get; set; }
         public IEnumerable<Orders> orders { get; set; }
+        public Payments payment { get; set; }
     }
 }

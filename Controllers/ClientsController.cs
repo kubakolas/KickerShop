@@ -115,6 +115,37 @@ namespace KickerShop.Controllers
             return RedirectToAction("Index");
         }
 
+        public ActionResult Orders(int id)
+        {
+            ClientOrdersViewModel model = new ClientOrdersViewModel();
+            var query =
+                (from client in db.ClientSet
+                 join order in db.OrderSet on client.Id equals order.Id
+                 where client.Id == id
+                 select order).ToList();
+            model.client = db.ClientSet.Find(id);
+            model.orders = query.ToList();
+            var payQuery =
+                (from order in db.OrderSet
+                 join payment in db.PaymentSet on order.Id equals payment.Ord_id
+                 where order.Id == id
+                 select payment).ToList().ToList();
+            if (payQuery.Count > 0)
+                model.payment = payQuery[0];
+            else model.payment = new Payments();
+            return View(model);
+        }
+
+        public ActionResult OrderDetails(int id)
+        {
+            var query =
+                (from order in db.OrderSet
+                 join orderDetails in db.OrderDetailSet on order.Id equals orderDetails.Order_id
+                 where order.Id == id
+                 select orderDetails).ToList();
+            return View(query.ToList());
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

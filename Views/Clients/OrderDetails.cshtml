@@ -1,11 +1,11 @@
 ﻿@model IEnumerable<KickerShop.Models.OrderDetails>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "OrderDetails";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Index</h2>
+<h2>OrderDetails</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -13,13 +13,13 @@
 <table class="table">
     <tr>
         <th>
-            Order id
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.Products.Name)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Quantity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Products.Unit_price)
         </th>
         <th></th>
     </tr>
@@ -27,18 +27,13 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Orders.Id)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.Products.Name)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Quantity)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id = item.OrderDetail_id }) |
-            @Html.ActionLink("Details", "Details", new { id = item.OrderDetail_id }) |
-            @Html.ActionLink("Delete", "Delete", new { id = item.OrderDetail_id })
+            @Html.DisplayFor(modelItem => item.Products.Unit_price)
         </td>
     </tr>
 }

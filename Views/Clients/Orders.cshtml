@@ -1,0 +1,122 @@
+﻿@model KickerShop.Models.ClientOrdersViewModel
+
+@{
+    ViewBag.Title = "Client orders";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Client orders</h2>
+
+
+<div>
+    <h4>Client data:</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.client.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.client.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.client.Street)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.client.Street)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.client.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.client.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.client.City)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.client.City)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.client.Zip)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.client.Zip)
+        </dd>
+
+    </dl>
+</div>
+
+<table class="table">
+    <tr>
+        <th>
+            Order id
+        </th>
+        <th>
+            Date
+        </th>
+        <th>
+            Delivery type
+        </th>
+        <th>
+            Payment type
+        </th>
+        <th>
+            Total value
+        </th>
+        <th>
+            Delivery cost
+        </th>
+        <th>
+            Discount
+        </th>
+        <th>
+            To pay
+        </th>
+    </tr>
+
+    @foreach (var item in Model.orders)
+    {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrderDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Delivery_types.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Payment_types.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.payment.Total_value)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.payment.Delivery_cost)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.payment.Discount)
+        </td>
+        <td>
+            @Html.DisplayFor(model => model.payment.Pay_value)
+        </td>
+        <td>
+            @Html.ActionLink("Order details", "OrderDetails", new { id = item.Id })
+        </td>
+    </tr>
+    }
+
+    <div>
+        @Html.ActionLink("Back to clients list", "Index")
+    </div>
+</table>
