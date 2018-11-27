@@ -5,37 +5,41 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>OrderDetails</h2>
-
+<h2>Order details</h2>
+<dl class="dl-horizontal">
+     <b>Order id:</b>
+     @Html.DisplayFor(model => model.Last().Order_id)
+</dl>
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Back to orders list", "Orders")
 </p>
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Products.Name)
+            Product name
         </th>
         <th>
             @Html.DisplayNameFor(model => model.Quantity)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Products.Unit_price)
+            Unit price
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Products.Name)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Quantity)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Products.Unit_price)
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Products.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Quantity)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Products.Unit_price)
+            </td>
+        </tr>
+    }
 
 </table>
