@@ -1,0 +1,24 @@
+﻿@model KickerShop.Models.OrderDetails
+
+@{
+    int i = ViewBag.i == null ? 0 : ViewBag.i;
+}
+
+<p>
+    <b><h5>Product @(@i+1)</h5></b>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Product_id, "Product:", htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownList("Product_id", null, htmlAttributes: new { @Name = "[" + i + "].Product_id", @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Product_id, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Quantity, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Quantity, new { htmlAttributes = new { @Name = "[" + i + "].Quantity", @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</p>
+
