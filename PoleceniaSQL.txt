@@ -1,11 +1,7 @@
-Trigger (posiada fukcje drop):
-
 Stan produktu w magazynie nie może być mniejszy od 0. - Aktualizacja, tworzenie Produktu
 
-drop trigger ProductQuantity;
-
 CREATE TRIGGER [dbo].[ProductQuantity]
-ON [dbo].[Product]
+ON [dbo].[Products]
 FOR  insert, update AS 
 IF EXISTS (
         SELECT *
@@ -16,160 +12,109 @@ BEGIN
     RAISERROR ('Ilosc dodawanego produktu zawsze wieksza od zera', 11, 1)
 END
 
+Sprawdzenie:
+
+INSERT INTO Products(Id, Name, Unit_price, Quantity)
+VALUES (12,'Spodnie Addidas', 90.00, -1);
 
 Nie można złożyć zamówienia na produkt kiedy jego stan wynosi 0. - aktualizacja, towrzenie Zamówienia
 
-drop trigger [OrderQuantity];
-
 CREATE TRIGGER [dbo].[OrderQuantity]
-ON [dbo].[Orders]
+ON [dbo].[OrderDetails]
 FOR  insert, update AS 
 IF EXISTS (
         SELECT *
-        FROM inserted i, Product p
-        WHERE p.Id = i.Pro_id AND p.Quantity = 0)
+        FROM inserted i, Products p
+        WHERE p.Id = i.Product_id AND p.Quantity = 0)
 BEGIN
 	ROLLBACK
     RAISERROR ('Brak produktu na magazynie', 11, 1)
 END
 
-Nie można złożyć zamówienia dopóki adres klienta nie zostanie uzupełniony - tworzenie zamównie przez klienta 
-
-drop trigger OrderAdress;
-
-create   trigger [dbo].[OrderAdress]
-on [dbo].[Orders]
-for Insert,Update
-as
-begin
-  declare @street varchar(40), @city varchar(20), @zip varchar(5)
-  SELECT @street = c.Street, @city = c.City , @zip = c.Zip
-     from Client c, inserted i
-	 where c.Id= i.Cli_id
-  if (@street is  null OR @city is null OR @zip is null)
-  begin
-     rollback
-	 raiserror('Klient nie posada uzupełnionego adresu',16,1)
-  end
-end
-
-Po złożeniu zamówienia stan produktu na magazynie zmniejsza się. - aktualizacja, tworznei zamowienia
-
-drop trigger [WarehouseQuantity];
+Po złożeniu zamówienia stan produktu na magazynie zmniejsza się w zaleznośći od ilości,
+informacja o maksymalnym zamówieniu gdy przewyżsyzmy stan magazynowy. - aktualizacja, tworznei zamowienia
 
 CREATE TRIGGER [dbo].[WarehouseQuantity]
-ON [dbo].[Orders]
+ON [dbo].[OrderDetails]
 FOR  insert, update AS 
 IF EXISTS (
         SELECT *
-        FROM inserted i, Product p
-        WHERE p.Id = i.Pro_id)
+        FROM inserted i, Products p
+        WHERE p.Id = i.Product_id AND i.Quantity <= p.Quantity)
 BEGIN
 	UPDATE
-  Product
-SET
-  Quantity = Quantity-1
-FROM
-  Product p ,inserted i 
-WHERE
-   i.Pro_id = p.Id
-END
-
-Jedyny akceptowany kraj przesyłki to Polska. - BRAK KOLUMNY Z NAZWA KRAJU
-
-Darmowa przesyłka powyżej określonej kwoty. - aktualizacja, tworzenie zamówienia
-
-CREATE TRIGGER [dbo].[OrdersFreeShip]
-ON [dbo].[Orders]
-FOR  insert, update AS 
-IF  (
-        SELECT SUM(p.Unit_price)
-        FROM inserted i, Orders o, Product p
-        WHERE i.Cli_id = o.Cli_id AND o.Pro_id = p.Id) > 150.00
-BEGIN
-update 
-Orders
-SET
-  Del_id = 3
-FROM
-   Orders o ,inserted i 
-WHERE
-  i.Cli_id = o.Cli_id
-END
-
-Sprawdzenie spójnosci produktu - producenta - magazynu - aktualizacja, dodanie produktu
-
-drop trigger [ProductWarehouse];
-
-CREATE TRIGGER [dbo].[ProductWarehouse]
-ON [dbo].[Product]
-FOR  insert, update AS 
-IF EXISTS (
-        SELECT *
-        FROM inserted i, Producer p
-        WHERE i.Producer_id = p.Id AND i.War_id != p.War_id)
-BEGIN
-	ROLLBACK
-    RAISERROR ('Niezgodnosc magazynu z magazynem producenta', 11, 1)
-END
-
-WARINGG ! Kazdy triger z osobna działa i spełnia swoją funkcję jednak "OrdersFreeShip" odpierdala mu gdy są załadowane pozostale triggery,
-(bardzo głebokie wywołanie) i dziwny komunikat pojawia sie z kazdym triggerem "The transaction ended in the trigger. The batch has been aborted."
-
-Procedury:
-
-Tworzenie oraz usuwanie klienta - Niepotrzeba ze wzgłegu na saoinkrementujące id oraz warunki spójności c#
-
-Modyfikacja i uzupełnianie danych klienta -Niepotrzeba ze wzgłegu na saoinkrementujące id oraz warunki spójności c#
-
-Dodawanie nowych produktów (id > 1000, proce <0.00)
-
-CREATE   procedure [dbo].[InsertProcuct]
-@id int,
-@name varchar(40),
-@unitprice float,
-@quantity int,
-@warid int,
-@producerid int
-as
-if @unitprice <= 0.00
-begin
-  RAISERROR ('Cena za produkt nie może być mnijsza od zera', 11, 1) 
-  return
+	 Products 
+	SET
+	 Quantity = p.Quantity-i.Quantity
+	FROM
+	Products p ,inserted i 
+	WHERE
+	i.Product_id = p.Id
 end
-if @id > 1000
-begin
-  RAISERROR ('Numer identyfikacyjny nie może być wiekszy niz 1000', 11, 1) 
-  return
-end
-insert into Product(Id, Name, Unit_price, Quantity, War_id, Producer_id)
-values(@id,@name,@unitprice,@quantity,@warid,@producerid)
+ELSE 
+BEGIN
+	
+		DECLARE @ProductQuantity INT
+		SElect @ProductQuantity = p.Quantity from inserted i, Products p WHERE p.Id = i.Product_id
+		RAISERROR ('Nie wystarczająca ilość produktu na magazynie (maksymalna ilość %i)' , 11, 1, @ProductQuantity)
+		ROLLBACK
+END
 
-Raport stanu magazynowego towarów
+PROCEDURO-TRIGGER
 
-CREATE   procedure [dbo].[WarehouseReport]
-@warehouseid int
+Obsłyga rabatów oraz darmowej przesyłki i tworzenia Payments na podstawie OrderDetails
+
+CREATE   procedure [dbo].[InsertPayment]
+(@order_id int)
 as
 begin
-  Select p.Id, p.Name, p.Quantity from Product p
-  Where p.War_id = @warehouseid
-end
+ declare @total_value float
+ declare @delivery_cost int
+ declare @discount int
+ declare @pay_value float
 
-Historia zamówień dla klienta
+ select  @total_value = sum(od.Quantity * p.Unit_price) from OrderDetails od, Products p Where od.Product_id = p.Id AND od.Order_id = @order_id;
+ select  @delivery_cost = d.Unit_price from [Delivery types] d, Orders o where o.Id = @order_id AND d.Id = o.DeliveryType_id;
+ 
+ if (@total_value >= 150.00 AND @total_value < 300)
+	begin
+	 select @delivery_cost = 0;
+	 select @discount = 0;
+	end
+
+if (@total_value >= 300.00 AND @total_value < 500)
+	begin
+	 select @delivery_cost = 0;
+	 select @discount = 10;
+	end
+
+if (@total_value >= 500)
+	begin
+	 select @delivery_cost = 0;
+	 select @discount = 15;
+	end
+select  @pay_value = @delivery_cost + (@total_value*(100 - @discount))/100;
+end
+insert into Payments(Ord_id, Total_value, Delivery_cost, Discount, Pay_value)
+values(@order_id, @total_value, @delivery_cost, @discount, @pay_value);
+
+PROCEDURY
+
+Historia zamówień klienta
+
+drop procedure [ClientHistory];
 
 CREATE   procedure [dbo].[ClientHistory]
 @clientid int
 as
 begin
-  Select o.Cli_id, p.Id, p.Name from Product p, Orders o
-  Where o.Cli_id = @clientid AND o.Pro_id = p.Id
+  Select o.OrderDate, p.Id As ProductId, p.Name from Products p, Orders o, OrderDetails od
+  Where o.Client_id = @clientid AND o.Id = od.Order_id AND od.Product_id = p.Id
 end
 
-Roczny raport inwentaryzacyjny - Nie posadamy kolumny data więc nie wykonywalne
+FUNKCJE
 
-Funkcje: 
-
-Ilość zamówień: OrdersQuantity(CLI_ID) - zmiana nazwy na OrdersCount
+Ilość zamówień złozonych przez jednego klienta
 
 CREATE FUNCTION  [dbo].[OrdersCount](@clientid int)
 RETURNS INT
@@ -178,37 +123,33 @@ BEGIN
 	declare @count INT
    SELECT @count = count(*)
    FROM Orders o
-   where o.Cli_id = @clientid
+   where o.Client_id = @clientid
    RETURN @count; 
 END
-GO
 
-Ilość zakupionych towarów: ProducysQuantity(ORD_ID) - brak ponieważ u nas ilość zamówień jest równa ilośći zakupionych towarów
 
-Wartość zamówienia w okresie czasu: OrdersValue(CLI_ID, DATE) - bez DATE bo nie posadamy czasu
+Wartość wszytkich zamówień jakie złozył klient (na podstawie Orders a nie Payment)
 
 CREATE FUNCTION  [dbo].[OrderWorth](@clientid int)
 RETURNS FLOAT
 as
 BEGIN 
 	declare @sum FLOAT
-	select @sum = SUM(p.Unit_price) 
-   from Orders o, Product p
-	where o.Cli_id =@clientid AND p.Id = o.Pro_id
+	select @sum = SUM(p.Unit_price * od.Quantity) 
+   from Orders o, Products p, OrderDetails od
+	where o.Client_id =@clientid AND od.Order_id = o.Id AND p.Id = od.Product_id
    RETURN @sum 
 END
-GO
 
-Przychód w okresie czasu: Income()
+Całkowity przychód (na podstawie Orders a nie Payment)
 
 CREATE FUNCTION  [dbo].[Income]()
 RETURNS FLOAT
 as
 BEGIN 
 	declare @sum FLOAT
-	select @sum = SUM(p.Unit_price) 
-    from Orders o, Product p
-	where  p.Id = o.Pro_id
+	select @sum = SUM(p.Unit_price * od.Quantity) 
+    from Orders o, Products p, OrderDetails od
+	where  o.Id = od.Order_id AND p.Id = od.Product_id
    RETURN @sum 
 END
-GO
