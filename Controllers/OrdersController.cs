@@ -46,14 +46,15 @@ namespace KickerShop.Controllers
         }
 
         // POST: Orders/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "Id,OrderDate,Client_id,DeliveryType_id,PayType_id")] Orders orders)
+        public ActionResult Create([Bind(Include = "Id,OrderDate,Client_id,DeliveryType_id,PayType_id")] Orders orders,
+                                    List<OrderDetails> details)
         {
+            orders.OrderDate = DateTime.Now;
             if (ModelState.IsValid)
             {
+<<<<<<< HEAD
                 try
                 {
                     db.OrderSet.Add(orders);
@@ -74,12 +75,33 @@ namespace KickerShop.Controllers
                     ViewBag.Error = msg;
                     return View(orders);
                 }
+=======
+                db.OrderSet.Add(orders);
+                db.SaveChanges();
+                int id = db.OrderSet.FirstOrDefault(o => o.Id == orders.Id).Id;
+                foreach (var detail in details)
+                {
+                    detail.Order_id = id;
+                }
+                db.OrderDetailSet.AddRange(details);
+                db.SaveChanges();
+                // TO do 
+                // tu stworzyc Payment z uzyciem procedury
+                return RedirectToAction("Index");
+>>>>>>> ad8b5d4d3efffafb9f72f2705a71c830e3bebfc6
             }
-
             ViewBag.Client_id = new SelectList(db.ClientSet, "Id", "Name", orders.Client_id);
             ViewBag.DeliveryType_id = new SelectList(db.Delivery_typeSet, "Id", "Name", orders.DeliveryType_id);
             ViewBag.PayType_id = new SelectList(db.Payment_typeSet, "Id", "Name", orders.PayType_id);
             return View(orders);
+        }
+
+        // For adding product to order
+        public ActionResult OrderDetails(int? i)
+        {
+            ViewBag.Product_id = new SelectList(db.ProductSet, "Id", "Name");
+            ViewBag.i = i;
+            return PartialView();
         }
 
         // GET: Orders/Edit/5
@@ -101,17 +123,30 @@ namespace KickerShop.Controllers
         }
 
         // POST: Orders/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "Id,OrderDate,Client_id,DeliveryType_id,PayType_id")] Orders orders)
+        public ActionResult Edit([Bind(Include = "Id,OrderDate,Client_id,DeliveryType_id,PayType_id")] Orders orders,
+                                 List<OrderDetails> details)
         {
             if (ModelState.IsValid)
             {
-                db.Entry(orders).State = EntityState.Modified;
+                Orders ord = db.OrderSet.FirstOrDefault(o => o.Id == orders.Id);
+                ord.Client_id = orders.Client_id;
+                ord.DeliveryType_id = orders.DeliveryType_id;
+                ord.PayType_id = orders.PayType_id;
                 db.SaveChanges();
-                return RedirectToAction("Index");
+                if(details != null)
+                foreach (var detail in details)
+                {
+                    OrderDetails det = db.OrderDetailSet.FirstOrDefault(o => o.OrderDetail_id == detail.OrderDetail_id);
+                    det.Product_id = detail.Product_id;
+                    det.Quantity = detail.Quantity;
+                    db.SaveChanges();
+                }
+                ViewBag.Client_id = new SelectList(db.ClientSet, "Id", "Name", orders.Client_id);
+                ViewBag.DeliveryType_id = new SelectList(db.Delivery_typeSet, "Id", "Name", orders.DeliveryType_id);
+                ViewBag.PayType_id = new SelectList(db.Payment_typeSet, "Id", "Name", orders.PayType_id);
+                return View(ord);
             }
             ViewBag.Client_id = new SelectList(db.ClientSet, "Id", "Name", orders.Client_id);
             ViewBag.DeliveryType_id = new SelectList(db.Delivery_typeSet, "Id", "Name", orders.DeliveryType_id);
@@ -132,6 +167,20 @@ namespace KickerShop.Controllers
                 return HttpNotFound();
             }
             return View(orders);
+        }
+
+        public ActionResult DeleteDetail(int[] details)
+        {
+            if (details != null)
+            {
+                foreach (var ordDetailID in details)
+                {
+                    var detail = db.OrderDetailSet.Where(o => o.OrderDetail_id == ordDetailID).FirstOrDefault();
+                    db.OrderDetailSet.Remove(detail);
+                }
+                db.SaveChanges();
+            }
+            return Json("OK");
         }
 
         // POST: Orders/Delete/5

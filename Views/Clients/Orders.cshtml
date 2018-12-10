@@ -83,35 +83,35 @@
         </th>
     </tr>
 
-    @foreach (var item in Model.orders)
+    @foreach (var item in Model.orderPayment)
     {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.Id)
+            @Html.DisplayFor(modelItem => item.order.Id)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.OrderDate)
+            @Html.DisplayFor(modelItem => item.order.OrderDate)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Delivery_types.Name)
+            @Html.DisplayFor(modelItem => item.order.Delivery_types.Name)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Payment_types.Name)
+            @Html.DisplayFor(modelItem => item.order.Payment_types.Name)
         </td>
         <td>
-            @Html.DisplayFor(model => model.payment.Total_value)
+            @Html.DisplayFor(model => item.payment.Total_value)
         </td>
         <td>
-            @Html.DisplayFor(model => model.payment.Delivery_cost)
+            @Html.DisplayFor(model => item.payment.Delivery_cost)
         </td>
         <td>
-            @Html.DisplayFor(model => model.payment.Discount)
+            @Html.DisplayFor(model => item.payment.Discount)%
         </td>
         <td>
-            @Html.DisplayFor(model => model.payment.Pay_value)
+            @Html.DisplayFor(model => item.payment.Pay_value)
         </td>
         <td>
-            @Html.ActionLink("Order details", "OrderDetails", new { id = item.Id })
+            @Html.ActionLink("Order details", "OrderDetails", new { id = item.order.Id })
         </td>
     </tr>
     }

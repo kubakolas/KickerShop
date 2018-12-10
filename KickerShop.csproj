@@ -173,7 +173,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\ClientOrdersViewModel.cs" />
+    <Compile Include="Models\ClientOrdersViewModel\ClientOrdersViewModel.cs" />
     <Compile Include="Models\Clients.cs">
       <DependentUpon>KickerShopModel.tt</DependentUpon>
     </Compile>
@@ -334,6 +334,7 @@
     <Content Include="Views\Orders\Index.cshtml" />
     <Content Include="Views\Clients\Orders.cshtml" />
     <Content Include="Views\Clients\OrderDetails.cshtml" />
+<<<<<<< HEAD
     <Content Include="Scripts\umd\popper.min.js.map" />
     <Content Include="Scripts\umd\popper.js.map" />
     <Content Include="Scripts\umd\popper-utils.min.js.map" />
@@ -343,6 +344,9 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
+=======
+    <Content Include="Views\Orders\OrderDetails.cshtml" />
+>>>>>>> ad8b5d4d3efffafb9f72f2705a71c830e3bebfc6
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
