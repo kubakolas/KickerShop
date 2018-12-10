@@ -166,8 +166,14 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\ClientHistory_Result.cs">
+      <DependentUpon>KickerShopModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ClientOrdersViewModel\ClientOrdersViewModel.cs" />
     <Compile Include="Models\Clients.cs">
+      <DependentUpon>KickerShopModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\database_firewall_rules.cs">
       <DependentUpon>KickerShopModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Delivery_types.cs">

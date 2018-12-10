@@ -9,6 +9,11 @@
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
+<p>
+    <div class="text-danger">
+        @ViewBag.Error
+    </div>
+</p>
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
@@ -40,32 +45,34 @@
             @Html.ValidationMessageFor(model => model.PayType_id, "", new { @class = "text-danger" })
         </div>
     </div>
-
-    <table>
-        <tr>
-            <th>Product ID:</th>
-            <th>Quantity</th>
-            <th></th>
-        </tr>
         @{ int i = 0;}
         @foreach (var item in Model.OrderDetails)
         {
-            <tr>
-                <td>@Html.EditorFor(model => item.Product_id, new { htmlAttributes = new { @Name = "[" + i + "].Product_id" } })</td>
-                <td>@Html.EditorFor(model => item.Quantity, new { htmlAttributes = new { @Name = "[" + i + "].Quantity" } })</td>
-                <td>
+      <div>
+        <b><h5>Product @(@i + 1)</h5></b>
+            <div class="form-group">
+                @Html.LabelFor(model => item.Product_id, "Product:", htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.DropDownList("Product_id", null, htmlAttributes: new { @Name = "[" + i + "].Product_id", @class = "form-control" })
+                    @Html.ValidationMessageFor(model => item.Product_id, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(model => item.Quantity, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => item.Quantity, new { htmlAttributes = new { @Name = "[" + i + "].Quantity", @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => item.Quantity, "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
                     @Html.HiddenFor(model => item.OrderDetail_id, new { @Name = "[" + i + "].OrderDetail_id" })
-                               <input type="button" value="Remove product" class="remove"/>
-                                @*<div class="form-group">
-                                    <div class="col-md-offset-2 col-md-10">
-                                        <input type="button" value="Remove product" id="remove" class="btn btn-default" />
-                                    </div>
-                                </div>*@
-                 </td>
-            </tr>
+                    <input type="button" value="Remove product" class="remove" />
+                    </div>
+                </div>
+            </div>
             i++;
         }
-    </table>
     <div class="form-group">
         <div class="col-md-offset-2 col-md-10">
             <input type="submit" value="Save order" id="submit" class="btn btn-default" />
@@ -78,7 +85,7 @@
         var ordDetailsIds = Array();
         $(".remove").click(function () {
             ordDetailsIds.push($(this).prev().val());
-            $(this).parent().parent().remove();
+            $(this).parent().parent().parent().remove();
         })
         $("#submit").click(function () {
             $.ajax({
@@ -91,7 +98,6 @@
             })
             $("form").submit();
         })
-                //When we submit the form, the delete operation will be saved to database.
     </script>
     @Scripts.Render("~/bundles/jqueryval")
 }

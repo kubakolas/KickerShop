@@ -9,7 +9,11 @@
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>
-
+<p>
+    <div class="text-danger">
+        @ViewBag.Error
+    </div>
+</p>
 @using (Html.BeginForm("Create", "Orders", FormMethod.Post, new { id = "form1" }))
 {
     @Html.AntiForgeryToken()

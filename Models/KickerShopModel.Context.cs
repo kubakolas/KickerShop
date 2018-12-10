@@ -12,6 +12,8 @@ namespace KickerShop.Models
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Entity.Core.Objects;
+    using System.Linq;
     
     public partial class KickerShopEntities : DbContext
     {
@@ -32,5 +34,24 @@ namespace KickerShop.Models
         public virtual DbSet<Payment_types> Payment_typeSet { get; set; }
         public virtual DbSet<Payments> PaymentSet { get; set; }
         public virtual DbSet<Products> ProductSet { get; set; }
+        public virtual DbSet<database_firewall_rules> database_firewall_rules { get; set; }
+    
+        public virtual ObjectResult<ClientHistory_Result> ClientHistory(Nullable<int> clientid)
+        {
+            var clientidParameter = clientid.HasValue ?
+                new ObjectParameter("clientid", clientid) :
+                new ObjectParameter("clientid", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<ClientHistory_Result>("ClientHistory", clientidParameter);
+        }
+    
+        public virtual int InsertPayment(Nullable<int> order_id)
+        {
+            var order_idParameter = order_id.HasValue ?
+                new ObjectParameter("order_id", order_id) :
+                new ObjectParameter("order_id", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertPayment", order_idParameter);
+        }
     }
 }

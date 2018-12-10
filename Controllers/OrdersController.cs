@@ -54,18 +54,35 @@ namespace KickerShop.Controllers
             orders.OrderDate = DateTime.Now;
             if (ModelState.IsValid)
             {
-                db.OrderSet.Add(orders);
-                db.SaveChanges();
-                int id = db.OrderSet.FirstOrDefault(o => o.Id == orders.Id).Id;
-                foreach (var detail in details)
+                try
                 {
-                    detail.Order_id = id;
+                    db.OrderSet.Add(orders);
+                    db.SaveChanges();
+                    int id = db.OrderSet.FirstOrDefault(o => o.Id == orders.Id).Id;
+                    foreach (var detail in details)
+                    {
+                        detail.Order_id = id;
+                    }
+                    db.OrderDetailSet.AddRange(details);
+                    db.SaveChanges();
+                    db.InsertPayment(id);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
                 }
-                db.OrderDetailSet.AddRange(details);
-                db.SaveChanges();
-                // TO do 
-                // tu stworzyc Payment z uzyciem procedury
-                return RedirectToAction("Index");
+                catch (Exception e)
+                {
+                    string msg = null;
+                    if (e.InnerException == null)
+                        msg = "Invalid order data";
+                    else
+                        msg = e.InnerException.InnerException.Message;
+
+                    ViewBag.Client_id = new SelectList(db.ClientSet, "Id", "Name", orders.Client_id);
+                    ViewBag.DeliveryType_id = new SelectList(db.Delivery_typeSet, "Id", "Name", orders.DeliveryType_id);
+                    ViewBag.PayType_id = new SelectList(db.Payment_typeSet, "Id", "Name", orders.PayType_id);
+                    ViewBag.Error = msg;
+                    return View(orders);
+                }
             }
             ViewBag.Client_id = new SelectList(db.ClientSet, "Id", "Name", orders.Client_id);
             ViewBag.DeliveryType_id = new SelectList(db.Delivery_typeSet, "Id", "Name", orders.DeliveryType_id);
@@ -96,6 +113,7 @@ namespace KickerShop.Controllers
             ViewBag.Client_id = new SelectList(db.ClientSet, "Id", "Name", orders.Client_id);
             ViewBag.DeliveryType_id = new SelectList(db.Delivery_typeSet, "Id", "Name", orders.DeliveryType_id);
             ViewBag.PayType_id = new SelectList(db.Payment_typeSet, "Id", "Name", orders.PayType_id);
+            ViewBag.Product_id = new SelectList(db.ProductSet, "Id", "Name");
             return View(orders);
         }
 
@@ -107,27 +125,48 @@ namespace KickerShop.Controllers
         {
             if (ModelState.IsValid)
             {
-                Orders ord = db.OrderSet.FirstOrDefault(o => o.Id == orders.Id);
-                ord.Client_id = orders.Client_id;
-                ord.DeliveryType_id = orders.DeliveryType_id;
-                ord.PayType_id = orders.PayType_id;
-                db.SaveChanges();
-                if(details != null)
-                foreach (var detail in details)
+                try
                 {
-                    OrderDetails det = db.OrderDetailSet.FirstOrDefault(o => o.OrderDetail_id == detail.OrderDetail_id);
-                    det.Product_id = detail.Product_id;
-                    det.Quantity = detail.Quantity;
+                    Orders ord = db.OrderSet.FirstOrDefault(o => o.Id == orders.Id);
+                    ord.Client_id = orders.Client_id;
+                    ord.DeliveryType_id = orders.DeliveryType_id;
+                    ord.PayType_id = orders.PayType_id;
                     db.SaveChanges();
+                    if (details != null)
+                        foreach (var detail in details)
+                        {
+                            OrderDetails det = db.OrderDetailSet.FirstOrDefault(o => o.OrderDetail_id == detail.OrderDetail_id);
+                            det.Product_id = detail.Product_id;
+                            det.Quantity = detail.Quantity;
+                            db.SaveChanges();
+                        }
+
+                    ViewBag.Client_id = new SelectList(db.ClientSet, "Id", "Name", orders.Client_id);
+                    ViewBag.DeliveryType_id = new SelectList(db.Delivery_typeSet, "Id", "Name", orders.DeliveryType_id);
+                    ViewBag.PayType_id = new SelectList(db.Payment_typeSet, "Id", "Name", orders.PayType_id);
+                    ViewBag.Product_id = new SelectList(db.ProductSet, "Id", "Name");
+                    return View(ord);
                 }
-                ViewBag.Client_id = new SelectList(db.ClientSet, "Id", "Name", orders.Client_id);
-                ViewBag.DeliveryType_id = new SelectList(db.Delivery_typeSet, "Id", "Name", orders.DeliveryType_id);
-                ViewBag.PayType_id = new SelectList(db.Payment_typeSet, "Id", "Name", orders.PayType_id);
-                return View(ord);
+                catch (Exception e)
+                {
+                    string msg = null;
+                    if (e.InnerException == null)
+                        msg = "Invalid order data";
+                    else
+                        msg = e.InnerException.InnerException.Message;
+
+                    ViewBag.Client_id = new SelectList(db.ClientSet, "Id", "Name", orders.Client_id);
+                    ViewBag.DeliveryType_id = new SelectList(db.Delivery_typeSet, "Id", "Name", orders.DeliveryType_id);
+                    ViewBag.PayType_id = new SelectList(db.Payment_typeSet, "Id", "Name", orders.PayType_id);
+                    ViewBag.Product_id = new SelectList(db.ProductSet, "Id", "Name");
+                    ViewBag.Error = msg;
+                    return View(orders);
+                }
             }
             ViewBag.Client_id = new SelectList(db.ClientSet, "Id", "Name", orders.Client_id);
             ViewBag.DeliveryType_id = new SelectList(db.Delivery_typeSet, "Id", "Name", orders.DeliveryType_id);
             ViewBag.PayType_id = new SelectList(db.Payment_typeSet, "Id", "Name", orders.PayType_id);
+            ViewBag.Product_id = new SelectList(db.ProductSet, "Id", "Name");
             return View(orders);
         }
 
@@ -166,6 +205,8 @@ namespace KickerShop.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Orders orders = db.OrderSet.Find(id);
+            db.OrderDetailSet.RemoveRange(orders.OrderDetails);
+            db.SaveChanges();
             db.OrderSet.Remove(orders);
             db.SaveChanges();
             return RedirectToAction("Index");

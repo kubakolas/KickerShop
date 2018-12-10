@@ -50,11 +50,24 @@ namespace KickerShop.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.ClientSet.Add(clients);
-                db.SaveChanges();
-                return RedirectToAction("Index");
-            }
+                try
+                {
+                    db.ClientSet.Add(clients);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception e)
+                {
+                    string msg = null;
+                    if (e.InnerException == null)
+                        msg = "Invalid order data";
+                    else
+                        msg = e.InnerException.InnerException.Message;
+                    ViewBag.Error = msg;
+                    return View(clients);
+                }
 
+            }
             return View(clients);
         }
 
@@ -82,9 +95,22 @@ namespace KickerShop.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(clients).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.Entry(clients).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception e)
+                {
+                    string msg = null;
+                    if (e.InnerException == null)
+                        msg = "Invalid order data";
+                    else
+                        msg = e.InnerException.InnerException.Message;
+                    ViewBag.Error = msg;
+                    return View(clients);
+                }
             }
             return View(clients);
         }

@@ -3,7 +3,11 @@
 @{
     int i = ViewBag.i == null ? 0 : ViewBag.i;
 }
-
+<p>
+    <div class="text-danger">
+        @ViewBag.Error
+    </div>
+</p>
 <p>
     <b><h5>Product @(@i+1)</h5></b>
     <div class="form-group">

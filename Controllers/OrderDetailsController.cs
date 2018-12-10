@@ -53,9 +53,25 @@ namespace KickerShop.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.OrderDetailSet.Add(orderDetails);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.OrderDetailSet.Add(orderDetails);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception e)
+                {
+                    string msg = null;
+                    if (e.InnerException == null)
+                        msg = "Invalid order data";
+                    else
+                        msg = e.InnerException.InnerException.Message;
+
+                    ViewBag.Order_id = new SelectList(db.OrderSet, "Id", "Id", orderDetails.Order_id);
+                    ViewBag.Product_id = new SelectList(db.ProductSet, "Id", "Name", orderDetails.Product_id);
+                    ViewBag.Error = msg;
+                    return View(orderDetails);
+                }
             }
 
             ViewBag.Order_id = new SelectList(db.OrderSet, "Id", "Id", orderDetails.Order_id);
