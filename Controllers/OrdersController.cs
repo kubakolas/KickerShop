@@ -108,16 +108,18 @@ namespace KickerShop.Controllers
             if (ModelState.IsValid)
             {
                 Orders ord = db.OrderSet.FirstOrDefault(o => o.Id == orders.Id);
-                ord = orders;
+                ord.Client_id = orders.Client_id;
+                ord.DeliveryType_id = orders.DeliveryType_id;
+                ord.PayType_id = orders.PayType_id;
+                db.SaveChanges();
                 if(details != null)
                 foreach (var detail in details)
                 {
-                    detail.Order_id = orders.Id;
                     OrderDetails det = db.OrderDetailSet.FirstOrDefault(o => o.OrderDetail_id == detail.OrderDetail_id);
-                    det = detail;
+                    det.Product_id = detail.Product_id;
+                    det.Quantity = detail.Quantity;
+                    db.SaveChanges();
                 }
-                db.SaveChanges();
-                ord = db.OrderSet.Where(o => o.Id == orders.Id).FirstOrDefault();
                 ViewBag.Client_id = new SelectList(db.ClientSet, "Id", "Name", orders.Client_id);
                 ViewBag.DeliveryType_id = new SelectList(db.Delivery_typeSet, "Id", "Name", orders.DeliveryType_id);
                 ViewBag.PayType_id = new SelectList(db.Payment_typeSet, "Id", "Name", orders.PayType_id);
