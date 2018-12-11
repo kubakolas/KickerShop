@@ -153,3 +153,34 @@ BEGIN
 	where  o.Id = od.Order_id AND p.Id = od.Product_id
    RETURN @sum 
 END
+
+BLOKOWANIE OPTYMISTYCZNE - procedura edit dla Products
+
+CREATE   procedure [dbo].[ProductUpdate]
+@productid int,
+@name varchar(40),
+@unitprice float,
+@quantity int
+as
+begin
+	declare @rowid rowversion
+
+	select @rowid = rowid
+	from Products
+	where Id = @productid
+	
+	--waitfor delay '00:00:10'
+
+	UPDATE Products
+       SET Name = @name,
+           Unit_price = @unitprice,
+		   Quantity = @quantity
+       WHERE Id = @productid
+           AND rowid = @rowid;
+
+	if @@ROWCOUNT = 0
+		if not exists ( select * from Products where Id = @productid)
+		RAISERROR ('Konflikt aktualizacji: Rekord z produktem został usunięty', 11, 1)
+	else
+		RAISERROR ('Konflikt aktualizacji: Rekord z produktem został zaktualizowany wcześniej', 11, 1)
+end
