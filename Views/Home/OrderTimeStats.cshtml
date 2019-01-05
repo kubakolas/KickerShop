@@ -1,0 +1,38 @@
+﻿@model IEnumerable<KickerShop.Models.OrderTime>
+
+@{
+    ViewBag.Title = "OrderTimeStats";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>OrderTimeStats</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayName("Client name")
+        </th>
+        <th>
+            @Html.DisplayName("Order ID")
+        </th>
+        <th>
+            @Html.DisplayName("Making order time")
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.clientName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.orderId)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.time)
+        </td>
+    </tr>
+}
+
+</table>

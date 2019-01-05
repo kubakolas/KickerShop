@@ -135,10 +135,31 @@ namespace KickerShop.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Clients clients = db.ClientSet.Find(id);
-            db.ClientSet.Remove(clients);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            try
+            {
+                Clients cl = db.ClientSet.Find(id);
+                var orders = cl.Orders;
+                foreach (var order in orders)
+                {
+                    db.OrderDetailSet.RemoveRange(order.OrderDetails);
+                }
+                db.SaveChanges();
+                db.OrderSet.RemoveRange(orders);
+                db.SaveChanges();
+                db.ClientSet.Remove(cl);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            catch (Exception e)
+            {
+                string msg = null;
+                if (e.InnerException == null)
+                    msg = "Invalid client data";
+                else
+                    msg = e.InnerException.InnerException.Message;
+                ViewBag.Error = msg;
+                return View(id);
+            }
         }
 
         public ActionResult Orders(int id)
