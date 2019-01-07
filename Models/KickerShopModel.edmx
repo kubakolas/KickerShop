@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="KickerShopModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="KickerShopModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Clients">
           <Key>
             <PropertyRef Name="Id" />
@@ -70,6 +70,19 @@
           <Property Name="Name" Type="varchar" MaxLength="40" Nullable="false" />
           <Property Name="Unit_price" Type="float" Nullable="false" />
           <Property Name="Quantity" Type="int" Nullable="false" />
+          <Property Name="rowid" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'KickerShop.dbo.Report' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Report">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" Nullable="false" />
+          <Property Name="Jare" Type="int" />
+          <Property Name="Total" Type="float" />
+          <Property Name="Order_Count" Type="int" />
+          <Property Name="Avg_Per_Order" Type="float" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'KickerShop.sys.database_firewall_rules' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -164,9 +177,13 @@ warning 6002: The table/view 'KickerShop.sys.database_firewall_rules' does not h
         <Function Name="ClientHistory" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="clientid" Type="int" Mode="In" />
         </Function>
+        <Function Name="DiscountValue" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="Income" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="float" />
         <Function Name="InsertPayment" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="order_id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="MostProfitableProducts" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="number" Type="int" Mode="In" />
         </Function>
         <Function Name="OrdersCount" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int">
           <Parameter Name="clientid" Type="int" Mode="In" />
@@ -182,6 +199,15 @@ warning 6002: The table/view 'KickerShop.sys.database_firewall_rules' does not h
           <EntitySet Name="Payment types" EntityType="Self.Payment types" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Payments" EntityType="Self.Payments" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Products" EntityType="Self.Products" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Report" EntityType="Self.Report" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Report].[Id] AS [Id], 
+    [Report].[Jare] AS [Jare], 
+    [Report].[Total] AS [Total], 
+    [Report].[Order_Count] AS [Order_Count], 
+    [Report].[Avg_Per_Order] AS [Avg_Per_Order]
+    FROM [dbo].[Report] AS [Report]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="database_firewall_rules" EntityType="Self.database_firewall_rules" store:Type="Views" store:Schema="sys">
             <DefiningQuery>SELECT 
     [database_firewall_rules].[id] AS [id], 
@@ -217,8 +243,7 @@ warning 6002: The table/view 'KickerShop.sys.database_firewall_rules' does not h
             <End Role="Payments" EntitySet="Payments" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="KickerShopModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -299,6 +324,7 @@ warning 6002: The table/view 'KickerShop.sys.database_firewall_rules' does not h
           <Property Name="Unit_price" Type="Double" Nullable="false" />
           <Property Name="Quantity" Type="Int32" Nullable="false" />
           <NavigationProperty Name="OrderDetails" Relationship="Self.FK__OrderDeta__Produ__14270015" FromRole="Products" ToRole="OrderDetails" />
+          <Property Name="rowid" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="database_firewall_rules">
           <Key>
@@ -422,17 +448,50 @@ warning 6002: The table/view 'KickerShop.sys.database_firewall_rules' does not h
             <End Role="Payments" EntitySet="Payments" />
           </AssociationSet>
           <FunctionImport Name="ClientHistory" ReturnType="Collection(KickerShopModel.ClientHistory_Result)">
-            <Parameter Name="clientid" Mode="In" Type="Int32" />
+          <Parameter Name="clientid" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="InsertPayment">
-            <Parameter Name="order_id" Mode="In" Type="Int32" />
+          <Parameter Name="order_id" Mode="In" Type="Int32" />
           </FunctionImport>
+          <FunctionImport Name="DiscountValue" ReturnType="Collection(KickerShopModel.DiscountValue_Result)" />
+          <FunctionImport Name="DiscountValue1" ReturnType="Collection(KickerShopModel.DiscountValue1_Result)" />
+          <FunctionImport Name="MostProfitableProducts" ReturnType="Collection(KickerShopModel.MostProfitableProducts_Result)">
+          <Parameter Name="number" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="Report" EntityType="KickerShopModel.Report" />
         </EntityContainer>
         <ComplexType Name="ClientHistory_Result">
           <Property Type="DateTime" Name="OrderDate" Nullable="false" Precision="16" />
           <Property Type="Int32" Name="ProductId" Nullable="false" />
           <Property Type="String" Name="Name" Nullable="false" MaxLength="40" />
         </ComplexType>
+        <ComplexType Name="DiscountValue_Result">
+          <Property Type="Double" Name="Total_value" Nullable="true" />
+          <Property Type="Double" Name="Total_Disconted_Value" Nullable="true" />
+          <Property Type="Double" Name="Distinction" Nullable="true" />
+          <Property Type="Double" Name="Procent" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="DiscountValue1_Result">
+          <Property Type="Double" Name="Total_value" Nullable="true" />
+          <Property Type="Double" Name="Total_Disconted_Value" Nullable="true" />
+          <Property Type="Double" Name="Distinction" Nullable="true" />
+          <Property Type="Double" Name="Procent" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="MostProfitableProducts_Result">
+          <Property Type="Int32" Name="Product_id" Nullable="true" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="40" />
+          <Property Type="Double" Name="Total" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="Report">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" />
+          <Property Name="Jare" Type="Int32" />
+          <Property Name="Total" Type="Double" />
+          <Property Name="Order_Count" Type="Int32" />
+          <Property Name="Avg_Per_Order" Type="Double" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -505,6 +564,7 @@ warning 6002: The table/view 'KickerShop.sys.database_firewall_rules' does not h
           <EntitySetMapping Name="Products">
             <EntityTypeMapping TypeName="KickerShopModel.Products">
               <MappingFragment StoreEntitySet="Products">
+                <ScalarProperty Name="rowid" ColumnName="rowid" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Unit_price" ColumnName="Unit_price" />
@@ -534,6 +594,36 @@ warning 6002: The table/view 'KickerShop.sys.database_firewall_rules' does not h
             </ResultMapping>
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="InsertPayment" FunctionName="KickerShopModel.Store.InsertPayment" />
+          <FunctionImportMapping FunctionImportName="DiscountValue1" FunctionName="KickerShopModel.Store.DiscountValue">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="KickerShopModel.DiscountValue1_Result">
+                <ScalarProperty Name="Total_value" ColumnName="Total_value" />
+                <ScalarProperty Name="Total_Disconted_Value" ColumnName="Total_Disconted_Value" />
+                <ScalarProperty Name="Distinction" ColumnName="Distinction" />
+                <ScalarProperty Name="Procent" ColumnName="Procent" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="MostProfitableProducts" FunctionName="KickerShopModel.Store.MostProfitableProducts">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="KickerShopModel.MostProfitableProducts_Result">
+                <ScalarProperty Name="Product_id" ColumnName="Product_id" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <EntitySetMapping Name="Report">
+            <EntityTypeMapping TypeName="KickerShopModel.Report">
+              <MappingFragment StoreEntitySet="Report">
+                <ScalarProperty Name="Avg_Per_Order" ColumnName="Avg_Per_Order" />
+                <ScalarProperty Name="Order_Count" ColumnName="Order_Count" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Jare" ColumnName="Jare" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

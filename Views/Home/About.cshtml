@@ -1,7 +1,33 @@
 ﻿@{
-    ViewBag.Title = "About";
+    ViewBag.Title = "Informations";
 }
 <h2>@ViewBag.Title.</h2>
 <h3>@ViewBag.Message</h3>
 
-<p>Use this area to provide additional information.</p>
+
+<table>
+    <thead><tr><th>Zapytanie</th><th>Akcja</th></tr></thead>
+    <tbody>
+
+        <tr>
+            <td>Roczne zestawienie zakupionych towarów</td>
+            <td> @Html.ActionLink("Start", "Query1")</td>
+        </tr>
+        <tr>
+            <td>Zamówienia z zaoszczędzonymi pieniędzmi z rabatów</td>
+            <td>@Html.ActionLink("Start", "Query2")</td>
+        </tr>
+        <tr>
+            <td>Najbardzije dochodowy towar</td>
+            <td>@Html.ActionLink("Start", "Query3")</td>
+        </tr>
+        <tr>
+            <td>Liczba darmowych przesyłek</td>
+            <td>@Html.ActionLink("Start", "Query4")</td>
+        </tr>
+        <tr>
+            <td>Raport czasowy</td>
+            <td>@Html.ActionLink("Start", "Query5")</td>
+        </tr>
+    </tbody>    
+    </table>

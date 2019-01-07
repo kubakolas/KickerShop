@@ -35,6 +35,7 @@ namespace KickerShop.Models
         public virtual DbSet<Payments> PaymentSet { get; set; }
         public virtual DbSet<Products> ProductSet { get; set; }
         public virtual DbSet<database_firewall_rules> database_firewall_rules { get; set; }
+        public virtual DbSet<Report> Report { get; set; }
     
         public virtual ObjectResult<ClientHistory_Result> ClientHistory(Nullable<int> clientid)
         {
@@ -52,6 +53,25 @@ namespace KickerShop.Models
                 new ObjectParameter("order_id", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("InsertPayment", order_idParameter);
+        }
+    
+        public virtual ObjectResult<DiscountValue_Result> DiscountValue()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<DiscountValue_Result>("DiscountValue");
+        }
+    
+        public virtual ObjectResult<DiscountValue1_Result> DiscountValue1()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<DiscountValue1_Result>("DiscountValue1");
+        }
+    
+        public virtual ObjectResult<MostProfitableProducts_Result> MostProfitableProducts(Nullable<int> number)
+        {
+            var numberParameter = number.HasValue ?
+                new ObjectParameter("number", number) :
+                new ObjectParameter("number", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<MostProfitableProducts_Result>("MostProfitableProducts", numberParameter);
         }
     }
 }

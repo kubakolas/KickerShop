@@ -1,0 +1,58 @@
+﻿@model IEnumerable<KickerShop.Models.DiscountValue1_Result>
+
+@{
+    ViewBag.Title = "Query2";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Query2</h2>
+
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Total_value)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Total_Disconted_Value)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Distinction)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Procent)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Total_value)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Total_Disconted_Value)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Distinction)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Procent)
+            </td>
+        </tr>
+    }
+
+</table>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-actions no-color">
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+}
+</div>

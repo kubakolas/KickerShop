@@ -1,0 +1,39 @@
+﻿
+@{
+    ViewBag.Title = "Query4";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Query3</h2>
+
+
+
+<table class="table">
+    <tr>
+        <th>
+            Free Delivery Count
+        </th>
+        <th></th>
+    </tr>
+
+   
+    
+        <tr>
+            <td>
+                @ViewBag.Count
+            </td>
+        </tr>
+    
+
+</table>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-actions no-color">
+        @Html.ActionLink("Back to List", "Index")
+    </div>
+}
+</div>
