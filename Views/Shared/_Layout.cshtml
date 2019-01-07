@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
@@ -21,15 +21,17 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Info", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
-                    <li>@Html.ActionLink("Clients", "Index", "Clients")</li>
-                    <li>@Html.ActionLink("Delivery types", "Index", "DeliveryTypes")</li>
-                    <li>@Html.ActionLink("Payment types", "Index", "PaymentTypes")</li>
-                    <li>@Html.ActionLink("Orders", "Index", "Orders")</li>
-                    <li>@Html.ActionLink("Payments", "Index", "Payments")</li>
+                    @*<li>@Html.ActionLink("Info", "About", "Home")</li>
+        <li>@Html.ActionLink("Contact", "Contact", "Home")</li>*@
+                    <li>@Html.ActionLink("Clients & orders", "Index", "Clients")</li>
+                    @*<li>@Html.ActionLink("Delivery types", "Index", "DeliveryTypes")</li>*@
+                    @*<li>@Html.ActionLink("Payment types", "Index", "PaymentTypes")</li>*@
+                    @*<li>@Html.ActionLink("Payments", "Index", "Payments")</li>*@
                     <li>@Html.ActionLink("Products", "Index", "Products")</li>
-                    <li>@Html.ActionLink("Orders details", "Index", "OrderDetails")</li>
+                    <li>@Html.ActionLink("New order", "Create", "Orders")</li>
+                    @*<li>@Html.ActionLink("Orders details", "Index", "OrderDetails")</li>*@
+                    <li>@Html.ActionLink("Order time stats", "OrderTimeStats", "Home")</li>
+                    <li>@Html.ActionLink("Current user : " + @KickerShop.Global.GlobalVariables.CurrentUserName, "UserChoice", "Home")</li>
                 </ul>
             </div>
         </div>
