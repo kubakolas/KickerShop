@@ -142,10 +142,9 @@ namespace KickerShop.Controllers
                 foreach (var order in orders)
                 {
                     db.OrderDetailSet.RemoveRange(order.OrderDetails);
+                    db.PaymentSet.RemoveRange(order.Payments);
                 }
-                db.SaveChanges();
                 db.OrderSet.RemoveRange(orders);
-                db.SaveChanges();
                 db.ClientSet.Remove(cl);
                 db.SaveChanges();
                 return RedirectToAction("Index");

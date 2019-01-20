@@ -60,6 +60,11 @@ namespace KickerShop.Controllers
         public ActionResult Create([Bind(Include = "Id,OrderDate,Client_id,DeliveryType_id,PayType_id")] Orders order,
                                     List<OrderDetails> details)
         {
+            ViewBag.Client_id = new SelectList(db.ClientSet, "Id", "Name", order.Client_id);
+            ViewBag.DeliveryType_id = new SelectList(db.Delivery_typeSet, "Id", "Name", order.DeliveryType_id);
+            ViewBag.PayType_id = new SelectList(db.Payment_typeSet, "Id", "Name", order.PayType_id);
+
+
             if (ModelState.IsValid)
             {
                 try
@@ -82,13 +87,14 @@ namespace KickerShop.Controllers
                     var mongoClient = new MongoClient("mongodb://kubakolas:Bazydanych12@kickershopcluster-shard-00-00-grsrl.mongodb.net:27017,kickershopcluster-shard-00-01-grsrl.mongodb.net:27017,kickershopcluster-shard-00-02-grsrl.mongodb.net:27017/test?ssl=true&replicaSet=KickerShopCluster-shard-0&authSource=admin&retryWrites=true");
                     var database = mongoClient.GetDatabase("KickerUserTimes");
                     var collection = database.GetCollection<OrderTime>("collection1");
-                    OrderTime ot = new OrderTime();
-                    ot.time = ordTime;
-                    ot.clientName = client.Name;
-                    ot.orderId = order.Id;
+                    OrderTime ot = new OrderTime
+                    {
+                        time = ordTime,
+                        clientName = client.Name,
+                        orderId = order.Id
+                    };
                     collection.InsertOne(ot);
-
-                    return Json("Order created!");
+                    return RedirectToAction("../Clients/Orders/" + client.Id.ToString());
                 }
                 catch (Exception e)
                 {
@@ -97,24 +103,11 @@ namespace KickerShop.Controllers
                         msg = "Invalid order data";
                     else
                         msg = e.InnerException.Message;
-
-                    ViewBag.Client_id = new SelectList(db.ClientSet, "Id", "Name", order.Client_id);
-                    ViewBag.DeliveryType_id = new SelectList(db.Delivery_typeSet, "Id", "Name", order.DeliveryType_id);
-                    ViewBag.PayType_id = new SelectList(db.Payment_typeSet, "Id", "Name", order.PayType_id);
                     ViewBag.Error = msg;
                     return View(order);
                 }
             }
             return RedirectToAction("Create");
-        }
-        public void RestoreProductsQuantity(List<OrderDetails> details)
-        {
-            foreach (var detail in details)
-            {
-                Products prod = db.ProductSet.FirstOrDefault(p => p.Id == detail.Product_id);
-                prod.Quantity += detail.Quantity;
-                db.SaveChanges();
-            }
         }
 
         // For adding product to order
@@ -150,6 +143,11 @@ namespace KickerShop.Controllers
         public ActionResult Edit([Bind(Include = "Id,OrderDate,Client_id,DeliveryType_id,PayType_id")] Orders orders,
                                  List<OrderDetails> details)
         {
+            ViewBag.Client_id = new SelectList(db.ClientSet, "Id", "Name", orders.Client_id);
+            ViewBag.DeliveryType_id = new SelectList(db.Delivery_typeSet, "Id", "Name", orders.DeliveryType_id);
+            ViewBag.PayType_id = new SelectList(db.Payment_typeSet, "Id", "Name", orders.PayType_id);
+            ViewBag.Product_id = new SelectList(db.ProductSet, "Id", "Name");
+
             if (ModelState.IsValid)
             {
                 try
@@ -167,11 +165,6 @@ namespace KickerShop.Controllers
                             det.Quantity = detail.Quantity;
                             db.SaveChanges();
                         }
-
-                    ViewBag.Client_id = new SelectList(db.ClientSet, "Id", "Name", orders.Client_id);
-                    ViewBag.DeliveryType_id = new SelectList(db.Delivery_typeSet, "Id", "Name", orders.DeliveryType_id);
-                    ViewBag.PayType_id = new SelectList(db.Payment_typeSet, "Id", "Name", orders.PayType_id);
-                    ViewBag.Product_id = new SelectList(db.ProductSet, "Id", "Name");
                     return View(ord);
                 }
                 catch (Exception e)
@@ -181,19 +174,10 @@ namespace KickerShop.Controllers
                         msg = "Invalid order data";
                     else
                         msg = e.InnerException.InnerException.Message;
-
-                    ViewBag.Client_id = new SelectList(db.ClientSet, "Id", "Name", orders.Client_id);
-                    ViewBag.DeliveryType_id = new SelectList(db.Delivery_typeSet, "Id", "Name", orders.DeliveryType_id);
-                    ViewBag.PayType_id = new SelectList(db.Payment_typeSet, "Id", "Name", orders.PayType_id);
-                    ViewBag.Product_id = new SelectList(db.ProductSet, "Id", "Name");
                     ViewBag.Error = msg;
                     return View(orders);
                 }
             }
-            ViewBag.Client_id = new SelectList(db.ClientSet, "Id", "Name", orders.Client_id);
-            ViewBag.DeliveryType_id = new SelectList(db.Delivery_typeSet, "Id", "Name", orders.DeliveryType_id);
-            ViewBag.PayType_id = new SelectList(db.Payment_typeSet, "Id", "Name", orders.PayType_id);
-            ViewBag.Product_id = new SelectList(db.ProductSet, "Id", "Name");
             return View(orders);
         }
 
@@ -233,7 +217,6 @@ namespace KickerShop.Controllers
         {
             Orders orders = db.OrderSet.Find(id);
             db.OrderDetailSet.RemoveRange(orders.OrderDetails);
-            db.SaveChanges();
             db.OrderSet.Remove(orders);
             db.SaveChanges();
             return RedirectToAction("Index");

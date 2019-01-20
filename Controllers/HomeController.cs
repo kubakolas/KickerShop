@@ -14,9 +14,6 @@ namespace KickerShop.Controllers
     {
         private KickerShopEntities db = new KickerShopEntities();
 
-
-
-
         public ActionResult Index()
         {
 
@@ -26,9 +23,6 @@ namespace KickerShop.Controllers
         public ActionResult About()
         {
             ViewBag.Message = "All information about Customers and our Shop";
-
-          
-
             return View();
         }
 
@@ -36,7 +30,6 @@ namespace KickerShop.Controllers
         {
             return View();
         }
-
 
         public ActionResult Query1()
         {
