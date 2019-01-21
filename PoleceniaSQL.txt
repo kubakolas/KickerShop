@@ -17,7 +17,7 @@ Sprawdzenie:
 INSERT INTO Products(Id, Name, Unit_price, Quantity)
 VALUES (12,'Spodnie Addidas', 90.00, -1);
 
-Cena troduktu nie może być mniejsza od zera
+Cena produktu nie może być mniejsza od zera
 
 CREATE TRIGGER [dbo].[ProductUnitPrice]
 ON [dbo].[Products]
@@ -30,6 +30,24 @@ BEGIN
 	ROLLBACK
     RAISERROR ('Cena produktu nie może być mniejsza od 0', 11, 1)
 END
+
+Klient bez uzupełnionych danych nie może złozyc zamówienia
+
+create trigger [dbo].[OrderAdress]
+on [dbo].[Orders]
+for Insert,Update
+as
+begin
+declare @street varchar(40), @city varchar(20), @zip varchar(5)
+SELECT @street = c.Street, @city = c.City , @zip = c.Zip
+from Clients c, inserted i
+where c.Id= i.Client_id
+if (@street is null OR @city is null OR @zip is null)
+begin
+rollback
+raiserror('Klient nie posiada uzupełnionego adresu',16,1)
+end
+end
 
 Nie można złożyć zamówienia na produkt kiedy jego stan wynosi 0. - aktualizacja, towrzenie Zamówienia
 
