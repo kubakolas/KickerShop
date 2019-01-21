@@ -11,7 +11,8 @@ namespace KickerShop.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Clients
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -21,10 +22,22 @@ namespace KickerShop.Models
         }
     
         public int Id { get; set; }
+        [Required(ErrorMessage = "Name can't be empty")]
+        [MinLength(2, ErrorMessage = "Minimum name length is 3")]
+        [MaxLength(40, ErrorMessage = "Maximum name length is 40")]
+        [RegularExpression(@"[a-zA-Z¹êœó³ñæ¿Ÿ¥ÊÓŒ£ÑÆ¯]{2}[a-zA-Z¹êœó³ñæ¿Ÿ¥ÊÓŒ£ÑÆ¯ ]*", ErrorMessage = "Invalid name")]
         public string Name { get; set; }
+        [MinLength(2, ErrorMessage = "Minimum street length is 3")]
+        [MaxLength(40, ErrorMessage = "Maximum street length is 40")]
+        [RegularExpression(@"[a-zA-Z¹êœó³ñæ¿Ÿ¥ÊÓŒ£ÑÆ¯]{2}[a-zA-Z¹êœó³ñæ¿Ÿ¥ÊÓŒ£ÑÆ¯ ]*", ErrorMessage = "Invalid street name")]
         public string Street { get; set; }
+        [Required(ErrorMessage = "Email can't be empty")]
+        [EmailAddress(ErrorMessage = "Invalid email address")]
         public string Email { get; set; }
+        [MinLength(2, ErrorMessage = "Minimum city length is 3")]
+        [MaxLength(40, ErrorMessage = "Maximum city length is 40")]
         public string City { get; set; }
+        [RegularExpression(@"[0-9]{2}\-[0-9]{3}", ErrorMessage = "Invalid ZIP code")]
         public string Zip { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

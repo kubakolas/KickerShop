@@ -11,7 +11,8 @@ namespace KickerShop.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Products
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -21,8 +22,16 @@ namespace KickerShop.Models
         }
     
         public int Id { get; set; }
+        [Required(ErrorMessage = "Name can't be empty")]
+        [MinLength(2, ErrorMessage = "Minimum name length is 3")]
+        [MaxLength(40, ErrorMessage = "Maximum name length is 40")]
+        [RegularExpression(@"[a-zA-Z¹êœó³ñæ¿Ÿ¥ÊÓŒ£ÑÆ¯]{2}[a-zA-Z¹êœó³ñæ¿Ÿ¥ÊÓŒ£ÑÆ¯ ]*", ErrorMessage = "Invalid name")]
         public string Name { get; set; }
+        [Required(ErrorMessage = "Unit price can't be empty")]
+        [Range(0.01, 999999.99, ErrorMessage = "Invalid unit price")]
         public double Unit_price { get; set; }
+        [Required(ErrorMessage = "Quantity can't be empty")]
+        [RegularExpression(@"[1-9][0-9]*", ErrorMessage = "Invalid quantity")]
         public int Quantity { get; set; }
         public byte[] rowid { get; set; }
     

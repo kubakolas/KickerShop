@@ -11,12 +11,15 @@ namespace KickerShop.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class OrderDetails
     {
         public int OrderDetail_id { get; set; }
         public Nullable<int> Order_id { get; set; }
         public Nullable<int> Product_id { get; set; }
+        [Required(ErrorMessage = "Quantity can't be empty")]
+        [RegularExpression(@"[1-9][0-9]*", ErrorMessage = "Invalid quantity")]
         public int Quantity { get; set; }
     
         public virtual Orders Orders { get; set; }

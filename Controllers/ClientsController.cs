@@ -52,6 +52,7 @@ namespace KickerShop.Controllers
             {
                 try
                 {
+                    clients.Zip = clients.Zip.Replace("-", "");
                     db.ClientSet.Add(clients);
                     db.SaveChanges();
                     return RedirectToAction("Index");
@@ -60,7 +61,7 @@ namespace KickerShop.Controllers
                 {
                     string msg = null;
                     if (e.InnerException == null)
-                        msg = "Invalid order data";
+                        msg = "Invalid client data";
                     else
                         msg = e.InnerException.InnerException.Message;
                     ViewBag.Error = msg;
@@ -105,7 +106,7 @@ namespace KickerShop.Controllers
                 {
                     string msg = null;
                     if (e.InnerException == null)
-                        msg = "Invalid order data";
+                        msg = "Invalid client data";
                     else
                         msg = e.InnerException.InnerException.Message;
                     ViewBag.Error = msg;

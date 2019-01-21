@@ -50,9 +50,22 @@ namespace KickerShop.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.ProductSet.Add(products);
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.ProductSet.Add(products);
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception e)
+                {
+                    string msg = null;
+                    if (e.InnerException == null)
+                        msg = "Invalid product data";
+                    else
+                        msg = e.InnerException.InnerException.Message;
+                    ViewBag.Error = msg;
+                    return View(products);
+                }
             }
 
             return View(products);
@@ -82,9 +95,22 @@ namespace KickerShop.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(products).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    db.Entry(products).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                catch (Exception e)
+                {
+                    string msg = null;
+                    if (e.InnerException == null)
+                        msg = "Invalid product data";
+                    else
+                        msg = e.InnerException.InnerException.Message;
+                    ViewBag.Error = msg;
+                    return View(products);
+                }
             }
             return View(products);
         }
@@ -109,10 +135,24 @@ namespace KickerShop.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Products products = db.ProductSet.Find(id);
-            db.ProductSet.Remove(products);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            Products products = null;
+            try
+            {
+                products = db.ProductSet.Find(id);
+                db.ProductSet.Remove(products);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            catch (Exception e)
+            {
+                string msg = null;
+                if (e.InnerException == null)
+                    msg = "Cant delete this product";
+                else
+                    msg = e.InnerException.InnerException.Message;
+                ViewBag.Error = msg;
+                return View(products);
+            }
         }
 
         protected override void Dispose(bool disposing)
