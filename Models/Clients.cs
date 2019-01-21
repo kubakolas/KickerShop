@@ -43,7 +43,7 @@ using System;
         [MinLength(2, ErrorMessage = "Minimum city length is 3")]
         [MaxLength(40, ErrorMessage = "Maximum city length is 40")]
         public string City { get; set; }
-        [RegularExpression(@"[0-9]{2}\-[0-9]{3}", ErrorMessage = "Invalid ZIP code")]
+        [RegularExpression(@"[0-9]{5}", ErrorMessage = "Invalid ZIP code")]
         public string Zip { get; set; }
 
 

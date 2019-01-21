@@ -107,6 +107,7 @@ namespace KickerShop.Controllers
                     return View(order);
                 }
             }
+            ViewBag.Error = "Ivalid order data";
             return RedirectToAction("Create");
         }
 
