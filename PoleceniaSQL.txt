@@ -162,18 +162,7 @@ BEGIN
 END
 
 
-Całkowity przychód (na podstawie Orders a nie Payment)
 
-CREATE FUNCTION  [dbo].[Income]()
-RETURNS FLOAT
-as
-BEGIN 
-	declare @sum FLOAT
-	select @sum = SUM(p.Unit_price * od.Quantity) 
-    from Orders o, Products p, OrderDetails od
-	where  o.Id = od.Order_id AND p.Id = od.Product_id
-   RETURN @sum 
-END
 
 BLOKOWANIE OPTYMISTYCZNE - procedura edit dla Products
 
