@@ -52,7 +52,6 @@ namespace KickerShop.Controllers
             {
                 try
                 {
-                    clients.Zip = clients.Zip.Replace("-", "");
                     db.ClientSet.Add(clients);
                     db.SaveChanges();
                     return RedirectToAction("Index");
@@ -98,7 +97,6 @@ namespace KickerShop.Controllers
             {
                 try
                 {
-                    clients.Zip = clients.Zip.Replace("-", "");
                     db.Entry(clients).State = EntityState.Modified;
                     db.SaveChanges();
                     return RedirectToAction("Index");
@@ -149,6 +147,11 @@ namespace KickerShop.Controllers
                 db.OrderSet.RemoveRange(orders);
                 db.ClientSet.Remove(cl);
                 db.SaveChanges();
+                if (id == KickerShop.Global.GlobalVariables.CurrentUserId)
+                {
+                    KickerShop.Global.GlobalVariables.CurrentUserId = -1;
+                    KickerShop.Global.GlobalVariables.CurrentUserName = "-";
+                }
                 return RedirectToAction("Index");
             }
             catch (Exception e)
