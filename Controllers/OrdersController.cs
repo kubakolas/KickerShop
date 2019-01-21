@@ -102,7 +102,7 @@ namespace KickerShop.Controllers
                     if (e.InnerException == null)
                         msg = "Invalid order data";
                     else
-                        msg = e.InnerException.Message;
+                        msg = e.InnerException.InnerException.Message;
                     ViewBag.Error = msg;
                     return View(order);
                 }

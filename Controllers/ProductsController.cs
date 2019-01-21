@@ -97,6 +97,7 @@ namespace KickerShop.Controllers
             {
                 try
                 {
+                    
                     db.Entry(products).State = EntityState.Modified;
                     db.SaveChanges();
                     return RedirectToAction("Index");

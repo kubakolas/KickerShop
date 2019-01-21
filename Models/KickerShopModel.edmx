@@ -191,6 +191,12 @@ warning 6002: The table/view 'KickerShop.sys.database_firewall_rules' does not h
         <Function Name="OrderWorth" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="float">
           <Parameter Name="clientid" Type="int" Mode="In" />
         </Function>
+        <Function Name="ProductUpdate" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="productid" Type="int" Mode="In" />
+          <Parameter Name="name" Type="varchar" Mode="In" />
+          <Parameter Name="unitprice" Type="float" Mode="In" />
+          <Parameter Name="quantity" Type="int" Mode="In" />
+        </Function>
         <EntityContainer Name="KickerShopModelStoreContainer">
           <EntitySet Name="Clients" EntityType="Self.Clients" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Delivery types" EntityType="Self.Delivery types" Schema="dbo" store:Type="Tables" />
@@ -459,6 +465,12 @@ warning 6002: The table/view 'KickerShop.sys.database_firewall_rules' does not h
           <Parameter Name="number" Mode="In" Type="Int32" />
           </FunctionImport>
           <EntitySet Name="Report" EntityType="KickerShopModel.Report" />
+          <FunctionImport Name="ProductUpdate">
+            <Parameter Name="productid" Mode="In" Type="Int32" />
+            <Parameter Name="name" Mode="In" Type="String" />
+            <Parameter Name="unitprice" Mode="In" Type="Double" />
+            <Parameter Name="quantity" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <ComplexType Name="ClientHistory_Result">
           <Property Type="DateTime" Name="OrderDate" Nullable="false" Precision="16" />
@@ -624,6 +636,7 @@ warning 6002: The table/view 'KickerShop.sys.database_firewall_rules' does not h
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="ProductUpdate" FunctionName="KickerShopModel.Store.ProductUpdate" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
