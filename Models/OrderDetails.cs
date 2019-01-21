@@ -14,8 +14,9 @@ namespace KickerShop.Models
 
 using System;
     using System.Collections.Generic;
-    
-public partial class OrderDetails
+    using System.ComponentModel.DataAnnotations;
+
+    public partial class OrderDetails
 {
 
     public int OrderDetail_id { get; set; }
@@ -23,8 +24,9 @@ public partial class OrderDetails
     public Nullable<int> Order_id { get; set; }
 
     public Nullable<int> Product_id { get; set; }
-
-    public int Quantity { get; set; }
+        [Required(ErrorMessage = "Quantity can't be empty")]
+        [RegularExpression(@"[1-9][0-9]*", ErrorMessage = "Invalid quantity")]
+        public int Quantity { get; set; }
 
 
 
