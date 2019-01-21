@@ -162,31 +162,7 @@ BEGIN
 END
 
 
-Wartość wszytkich zamówień jakie złozył klient (na podstawie Orders a nie Payment)
 
-CREATE FUNCTION  [dbo].[OrderWorth](@clientid int)
-RETURNS FLOAT
-as
-BEGIN 
-	declare @sum FLOAT
-	select @sum = SUM(p.Unit_price * od.Quantity) 
-   from Orders o, Products p, OrderDetails od
-	where o.Client_id =@clientid AND od.Order_id = o.Id AND p.Id = od.Product_id
-   RETURN @sum 
-END
-
-Całkowity przychód (na podstawie Orders a nie Payment)
-
-CREATE FUNCTION  [dbo].[Income]()
-RETURNS FLOAT
-as
-BEGIN 
-	declare @sum FLOAT
-	select @sum = SUM(p.Unit_price * od.Quantity) 
-    from Orders o, Products p, OrderDetails od
-	where  o.Id = od.Order_id AND p.Id = od.Product_id
-   RETURN @sum 
-END
 
 BLOKOWANIE OPTYMISTYCZNE - procedura edit dla Products
 
