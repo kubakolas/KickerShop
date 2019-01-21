@@ -17,6 +17,20 @@ Sprawdzenie:
 INSERT INTO Products(Id, Name, Unit_price, Quantity)
 VALUES (12,'Spodnie Addidas', 90.00, -1);
 
+Cena troduktu nie może być mniejsza od zera
+
+CREATE TRIGGER [dbo].[ProductUnitPrice]
+ON [dbo].[Products]
+FOR  insert, update AS 
+IF EXISTS (
+        SELECT *
+        FROM inserted i
+        WHERE i.Unit_price < 0)
+BEGIN
+	ROLLBACK
+    RAISERROR ('Cena produktu nie może być mniejsza od 0', 11, 1)
+END
+
 Nie można złożyć zamówienia na produkt kiedy jego stan wynosi 0. - aktualizacja, towrzenie Zamówienia
 
 CREATE TRIGGER [dbo].[OrderQuantity]
