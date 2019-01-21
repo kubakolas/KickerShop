@@ -1,6 +1,5 @@
 ﻿using KickerShop.Models;
 using MongoDB.Driver;
-
 using System;
 using System.Collections.Generic;
 using System.Dynamic;
@@ -83,10 +82,10 @@ namespace KickerShop.Controllers
             foreach (var a in query2)
             {
                 DiscountValue1_Result t = new DiscountValue1_Result();
-                t.Distinction = a.Distinction;
-                t.Procent = a.Procent;
-                t.Total_Disconted_Value = a.Total_Disconted_Value;
-                t.Total_value = a.Total_value;
+                t.Distinction = System.Math.Round((double)a.Distinction,2);
+                t.Procent = System.Math.Round((double)a.Procent,2);
+                t.Total_Disconted_Value = System.Math.Round((double)a.Total_Disconted_Value,2);
+                t.Total_value = System.Math.Round((double)a.Total_value,2);
 
                 double? b = t.Procent; 
                 temp.Add(t);
@@ -160,8 +159,8 @@ namespace KickerShop.Controllers
                 Report t = new Report();
                 t.Jare = a.Jare;
                 t.Order_Count = a.Order_Count;
-                t.Total = a.Total;
-                t.Avg_Per_Order = a.Avg_Per_Order;
+                t.Total = System.Math.Round((double)a.Total,2);
+                t.Avg_Per_Order = System.Math.Round((double)a.Avg_Per_Order,2);
 
                 int? s = t.Jare;
 
