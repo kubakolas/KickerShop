@@ -108,7 +108,7 @@ namespace KickerShop.Controllers
                 }
             }
             ViewBag.Error = "Ivalid order data";
-            return RedirectToAction("Create");
+            return View(order);
         }
 
         // For adding product to order
