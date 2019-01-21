@@ -98,6 +98,7 @@ namespace KickerShop.Controllers
             {
                 try
                 {
+                    clients.Zip = clients.Zip.Replace("-", "");
                     db.Entry(clients).State = EntityState.Modified;
                     db.SaveChanges();
                     return RedirectToAction("Index");
