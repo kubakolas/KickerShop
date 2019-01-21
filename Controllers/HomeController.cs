@@ -181,13 +181,11 @@ namespace KickerShop.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult UserChoice([Bind(Include = "Id,Name,Street,Email,City,Zip")] Clients clients)
         {
-            if (ModelState.IsValid)
-            {
-                KickerShop.Global.GlobalVariables.CurrentUserId = clients.Id;
-                Clients cl = db.ClientSet.Find(clients.Id);
-                KickerShop.Global.GlobalVariables.CurrentUserName = cl.Name;
-            }
+           KickerShop.Global.GlobalVariables.CurrentUserId = clients.Id;
+           Clients cl = db.ClientSet.Find(clients.Id);
+           KickerShop.Global.GlobalVariables.CurrentUserName = cl.Name;
             ViewBag.Id = new SelectList(db.ClientSet, "Id", "Name");
+            TempData["alertMessage"] = "User chosen!";
             return View();
         }
 
